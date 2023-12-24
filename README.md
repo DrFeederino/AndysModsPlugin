@@ -1,4 +1,4 @@
-# Andys Mods
+# Andy's Mods
 Personal list of custom-made mods for Lethal Company.
 # Released v1.2.0:
 - [ServerSide] Rare Bonk
