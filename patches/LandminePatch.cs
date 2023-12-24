@@ -5,6 +5,7 @@ using UnityEngine;
 namespace AndysModsPlugin.patches
 {
     [HarmonyPatch(typeof(Landmine))]
+    [HarmonyWrapSafe]
     internal static class LandminePatch
     {
         // Helper hash-set to detect an enemy we know. Needed for landmine. Postfix "(Clone)" is caused by game duplication.
