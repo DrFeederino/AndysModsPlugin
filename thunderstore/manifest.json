@@ -1,9 +1,10 @@
 {
   "name": "AndysMods",
-  "version_number": "1.2.1",
+  "version_number": "1.3.0",
   "website_url": "https://github.com/DrFeederino/AndysModsPlugin",
-  "description": "[V45] Collection of the mods to the game. Currently, it has: Rare-Bonk mod - makes shovel to lethally bonk anyone with 10% chance, Landmines Are No Joke - Enemies can also trigger and die from landmines.",
+  "description": "[V45] Collection of the mods to the game. New: Quick Switch With 1/2/3/4!",
   "dependencies": [
-    "BepInEx-BepInExPack-5.4.2100"
+    "BepInEx-BepInExPack-5.4.2100",
+    "Rune580-LethalCompany_InputUtils-0.4.3"
   ]
 }

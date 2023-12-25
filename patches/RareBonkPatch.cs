@@ -8,7 +8,7 @@ namespace AndysModsPlugin.patches
     internal static class RareBonkPatch
     {
         static AudioClip[] originalSfx;
-        static AssetBundle bonkBundle = AssetBundle.LoadFromFile($"{Plugin.PluginPath}bonk");
+        static AssetBundle bonkBundle = AssetBundle.LoadFromFile($"{AndysModsPlugin.PluginPath}bonk");
         static AudioClip[] bonkSfx = bonkBundle.LoadAssetWithSubAssets<AudioClip>("bonk.mp3");
         static System.Random random = new System.Random();
 
@@ -19,7 +19,7 @@ namespace AndysModsPlugin.patches
             int bonkChance = random.Next(1, 100);
             if (__instance != null && bonkChance <= 10)
             {
-                Plugin.Log.LogInfo("BONK!");
+                AndysModsPlugin.Log.LogInfo("BONK!");
                 __instance.shovelHitForce = 100; // should 100 be enough to BONK?
                 replaceHitAudioToBonk(__instance);
             }
@@ -29,7 +29,8 @@ namespace AndysModsPlugin.patches
         [HarmonyPostfix]
         static void removePatchShovel(Shovel __instance)
         {
-            if (__instance != null) { 
+            if (__instance != null)
+            {
                 __instance.shovelHitForce = 1;
                 restoreHitAudio(__instance);
             }
@@ -38,12 +39,12 @@ namespace AndysModsPlugin.patches
         {
             if (shovel == null)
             {
-                Plugin.Log.LogInfo($"No Shovel? Who calls us?");
+                AndysModsPlugin.Log.LogInfo($"No Shovel? Who calls us?");
                 return;
             }
             if (bonkSfx == null || bonkSfx.Length == 0)
             {
-                Plugin.Log.LogInfo("No BONK SFX has been found. Not changing shovel's sounds.");
+                AndysModsPlugin.Log.LogInfo("No BONK SFX has been found. Not changing shovel's sounds.");
                 return;
             }
             originalSfx = shovel.hitSFX;
@@ -54,15 +55,15 @@ namespace AndysModsPlugin.patches
         {
             if (shovel == null)
             {
-                Plugin.Log.LogInfo($"No Shovel? Who calls us?");
+                AndysModsPlugin.Log.LogInfo($"No Shovel? Who calls us?");
                 return;
             }
             if (originalSfx == null || originalSfx.Length == 0)
             {
-                Plugin.Log.LogInfo("No original SFX for shovel found.");
+                AndysModsPlugin.Log.LogInfo("No original SFX for shovel found.");
                 return;
             }
-            Plugin.Log.LogInfo("Restored shovel's original SFX.");
+            AndysModsPlugin.Log.LogInfo("Restored shovel's original SFX.");
             shovel.hitSFX = originalSfx;
         }
 

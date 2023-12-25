@@ -1,4 +1,5 @@
-﻿using BepInEx;
+﻿using AndysModsPlugin.patches;
+using BepInEx;
 using BepInEx.Logging;
 using UnityEngine;
 
@@ -7,11 +8,12 @@ namespace AndysModsPlugin
 
     [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
     [BepInProcess("Lethal Company.exe")]
-    public sealed class Plugin : BaseUnityPlugin
+    public sealed class AndysModsPlugin : BaseUnityPlugin
     {
         internal static ManualLogSource Log;
         internal static string PluginPath;
-        
+        internal static QuickSwitchInputClass quickSwitchInstance = QuickSwitchInputClass.Instance;
+
         private void Awake()
         {
             Log = Logger;

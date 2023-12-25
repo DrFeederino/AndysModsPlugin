@@ -12,11 +12,11 @@ namespace AndysModsPlugin
         private readonly Harmony harmony = new Harmony(PluginInfo.PLUGIN_GUID);
         public void Init()
         {
-            Plugin.Log.LogInfo("AndysMods is installed. Executing patches.");
+            AndysModsPlugin.Log.LogInfo("AndysMods is installed. Executing patches.");
 
             harmony.PatchAll();
 
-            Plugin.Log.LogInfo("Successfully added patches to game. Enjoy!");
+            AndysModsPlugin.Log.LogInfo("Successfully added patches to game. Enjoy!");
         }
     }
 

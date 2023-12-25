@@ -1,5 +1,9 @@
 # Andy's Mods
 Personal list of custom-made mods for Lethal Company.
+# Release v1.3.0:
+- [ClientSide] Quick Switch With 1/2/3/4
+\
+Added ability to quickly switch between item slots with 1/2/3/4 buttons! No more scrolling with the mouse.
 # Release v1.2.1:
 - Fixes:
     - Markdown and typos are fixed here and there.
@@ -14,6 +18,9 @@ Personal list of custom-made mods for Lethal Company.
 \
 Landmines can be triggered (read - exploded) by enemies. Nobody is safe!
 # Work in very hard progress
+- [ServerSide] Turrets Are No Joke
+\
+Turrets can target enemies too. Hell let loose!
 - [ServerSide] Masked Enemies are helpful?
 \
 Masked guys can bring loot too. Cute but dangerous!

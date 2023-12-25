@@ -71,7 +71,7 @@ namespace AndysModsPlugin.patches
             if (other == null) return;
             if (IsEnemy(other.transform.parent.gameObject))
             {
-                Plugin.Log.LogInfo($"Triggering mine explosion for {other.transform.parent.gameObject}.");
+                AndysModsPlugin.Log.LogInfo($"Landmines Are No Joke: Triggering mine explosion for {other.transform.parent.gameObject}.");
                 if (!__instance.hasExploded)
                 {
                     __instance.SetOffMineAnimation();

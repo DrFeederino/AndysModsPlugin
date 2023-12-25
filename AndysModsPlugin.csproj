@@ -4,7 +4,7 @@
     <TargetFramework>net48</TargetFramework>
     <AssemblyName>AndysModsPlugin</AssemblyName>
     <Description>Collection of mods packaged with care and love by Andy aka "DrFeederino".</Description>
-    <Version>1.2.1</Version>
+    <Version>1.3.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <DebugType>Full</DebugType>
+    <DebugType>Portable</DebugType>
   </PropertyGroup>
   
   <ItemGroup>
@@ -30,6 +30,9 @@
     <Reference Include="Assembly-CSharp">
     <!-- Don't forget to change path -->
       <HintPath>D:\SteamLibrary\steamapps\common\Lethal Company\Lethal Company_Data\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="LethalCompanyInputUtils">
+      <HintPath>..\Rune580-LethalCompany_InputUtils-0.4.3\LethalCompanyInputUtils\LethalCompanyInputUtils.dll</HintPath>
     </Reference>
     <Reference Include="netstandard" />
     <Reference Include="Unity.InputSystem">
