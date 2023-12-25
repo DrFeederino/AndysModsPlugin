@@ -12,7 +12,7 @@ namespace AndysModsPlugin.patches
         //[HarmonyPrefix]
         internal static void Start(EnemyAI __instance)
         {
-            Plugin.Log.LogInfo($"Registered playerControllerB to enable turret targeting.");
+            AndysModsPlugin.Log.LogInfo("Turrets Are No Joke: Registered playerControllerB to enable turret targeting.");
             __instance.gameObject.AddComponent<PlayerControllerB>();
         }
     }
@@ -24,7 +24,7 @@ namespace AndysModsPlugin.patches
         //[HarmonyPostfix]
         internal static void Update(Turret __instance)
         {
-            Plugin.Log.LogInfo($"Called update for turret instance. Current target is {__instance.targetPlayerWithRotation?.name}");
+            AndysModsPlugin.Log.LogInfo($"Turrets Are No Joke: Called update for turret instance. Current target is {__instance.targetPlayerWithRotation?.name}");
             EnemyAI ai;
             if (__instance.targetPlayerWithRotation != null && __instance.gameObject.TryGetComponent(out ai))
             {
@@ -42,7 +42,7 @@ namespace AndysModsPlugin.patches
         //[HarmonyPostfix]
         internal static void Start()
         {
-            Plugin.Log.LogInfo("Added turret to the map.");
+            AndysModsPlugin.Log.LogInfo("Turrets Are No Joke: Added turret to the map.");
         }
     }
 
@@ -65,7 +65,7 @@ namespace AndysModsPlugin.patches
         public void Initialize(Turret turret)
         {
             this.turret = turret;
-            Plugin.Log.LogInfo($"Added GameComponent to turret.");
+            AndysModsPlugin.Log.LogInfo("Turrets Are No Joke: Added GameComponent to turret.");
             Traverse turretTraverse = Traverse.Create(turret);
             //turretModeLastFrame = turretTraverse.Field("turretModeLastFrame");
             //rotatingClockwise = turretTraverse.Field("rotatingClockwise");
@@ -222,10 +222,9 @@ namespace AndysModsPlugin.patches
                     if (turretInterval >= 1.0f)
                     {
                         turretInterval = 0f;
-                        Plugin.Log.LogInfo("Charging timer is up, setting to firing mode");
+                        AndysModsPlugin.Log.LogInfo("Turrets Are No Joke: Charging timer is up, setting to firing mode");
                         if (!hasLineOfSight)
                         {
-                            Plugin.Log.LogInfo("hasLineOfSight is false");
                             targetEnemyAi = null;
                             RemoveTargetedEnemyClientRpc();
                             turret.turretMode = TurretMode.Detection;
@@ -248,7 +247,7 @@ namespace AndysModsPlugin.patches
                         EnemyAI newEnemyTarget = CheckForEnemiesInLineOfSight(3f);
                         if (newEnemyTarget != null)
                         {
-                            Plugin.Log.LogInfo($"Re-targeting to new enemy {newEnemyTarget.name}.");
+                            AndysModsPlugin.Log.LogInfo($"Turrets Are No Joke: Re-targeting to new enemy {newEnemyTarget.name}.");
                             turret.targetPlayerWithRotation = null;
                             targetEnemyAi = newEnemyTarget;
                             SetTargetToEnemyBody();

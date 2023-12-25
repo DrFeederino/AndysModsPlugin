@@ -19,7 +19,7 @@ namespace AndysModsPlugin.patches
             int bonkChance = random.Next(1, 100);
             if (__instance != null && bonkChance <= 10)
             {
-                AndysModsPlugin.Log.LogInfo("BONK!");
+                AndysModsPlugin.Log.LogInfo("Rare Bonk: BONK!");
                 __instance.shovelHitForce = 100; // should 100 be enough to BONK?
                 replaceHitAudioToBonk(__instance);
             }
@@ -39,12 +39,12 @@ namespace AndysModsPlugin.patches
         {
             if (shovel == null)
             {
-                AndysModsPlugin.Log.LogInfo($"No Shovel? Who calls us?");
+                AndysModsPlugin.Log.LogInfo("Rare Bonk: No Shovel? Who calls us?");
                 return;
             }
             if (bonkSfx == null || bonkSfx.Length == 0)
             {
-                AndysModsPlugin.Log.LogInfo("No BONK SFX has been found. Not changing shovel's sounds.");
+                AndysModsPlugin.Log.LogInfo("Rare Bonk: No BONK SFX has been found. Not changing shovel's sounds.");
                 return;
             }
             originalSfx = shovel.hitSFX;
@@ -55,15 +55,15 @@ namespace AndysModsPlugin.patches
         {
             if (shovel == null)
             {
-                AndysModsPlugin.Log.LogInfo($"No Shovel? Who calls us?");
+                AndysModsPlugin.Log.LogInfo("Rare Bonk: No Shovel? Who calls us?");
                 return;
             }
             if (originalSfx == null || originalSfx.Length == 0)
             {
-                AndysModsPlugin.Log.LogInfo("No original SFX for shovel found.");
+                AndysModsPlugin.Log.LogInfo("Rare Bonk: No original SFX for shovel found.");
                 return;
             }
-            AndysModsPlugin.Log.LogInfo("Restored shovel's original SFX.");
+            AndysModsPlugin.Log.LogInfo("Rare Bonk: Restored shovel's original SFX.");
             shovel.hitSFX = originalSfx;
         }
 
