@@ -1,5 +1,14 @@
 # Andy's Mods
 Personal list of custom-made mods for Lethal Company.
+# Release v1.4.0:
+- [ClientSide] Enable/Disable Mod
+\
+Let the player enable/disable mods. To enable/disable mod, type in the chat:\
+/quickswitch - toggles quick item switch mod,\
+/bonk - toggles Rare Bonk mod,\
+/landmine - toggles landmine mod.
+- Fixes:
+    - RareBonk is now [ServerSide] and all players can now hear it! Let the BONK begin!
 # Release v1.3.0:
 - [ClientSide] Quick Switch With 1/2/3/4
 \

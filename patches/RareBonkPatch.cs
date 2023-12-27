@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace AndysModsPlugin.patches
@@ -7,64 +8,93 @@ namespace AndysModsPlugin.patches
     [HarmonyWrapSafe]
     internal static class RareBonkPatch
     {
-        static AudioClip[] originalSfx;
-        static AssetBundle bonkBundle = AssetBundle.LoadFromFile($"{AndysModsPlugin.PluginPath}bonk");
-        static AudioClip[] bonkSfx = bonkBundle.LoadAssetWithSubAssets<AudioClip>("bonk.mp3");
-        static System.Random random = new System.Random();
+        static readonly System.Random random = new();
+        static readonly AssetBundle BonkAssetBundle = AssetBundle.LoadFromFile($"{AndysModsPlugin.PluginPath}bonk");
+        public static readonly AudioClip[] BonkHitSfx = BonkAssetBundle.LoadAssetWithSubAssets<AudioClip>("bonk.mp3");
+        public static readonly GameObject BonkNetworkPrefab = BonkAssetBundle.LoadAsset<GameObject>("BonkNetworkHandler");
+        public const int BonkShovelForce = 100; // should 100 be enough to BONK?
+        public const int OriginalShovelForce = 1; 
 
         [HarmonyPatch("HitShovel")]
         [HarmonyPrefix]
-        static void patchBonkShovel(Shovel __instance)
+        static void PatchBonkShovel(Shovel __instance, ref AudioClip[] __state)
         {
-            int bonkChance = random.Next(1, 100);
-            if (__instance != null && bonkChance <= 10)
+            if (!ModSettings.RareBonkMod.IsEnabled)
             {
-                AndysModsPlugin.Log.LogInfo("Rare Bonk: BONK!");
-                __instance.shovelHitForce = 100; // should 100 be enough to BONK?
-                replaceHitAudioToBonk(__instance);
+                return;
+            }
+            int bonkChance = random.Next(1, 100);
+            if (__instance != null && bonkChance <= 10 && BonkHitSfx != null && BonkHitSfx.Length != 0)
+            {
+                AndysModsPlugin.Log.LogInfo($"Rare Bonk: BONK by {__instance.playerHeldBy.playerUsername}!");
+                __instance.shovelHitForce = BonkShovelForce;
+                __state = __instance.hitSFX;
+                __instance.hitSFX = BonkHitSfx;
+                BonkNetworkHandler.Instance?.PlayBonkServerRpc(__instance.NetworkObjectId);
             }
         }
 
         [HarmonyPatch("HitShovel")]
         [HarmonyPostfix]
-        static void removePatchShovel(Shovel __instance)
+        static void RemovePatchShovel(Shovel __instance, ref AudioClip[] __state)
         {
-            if (__instance != null)
+            if (!ModSettings.RareBonkMod.IsEnabled)
             {
-                __instance.shovelHitForce = 1;
-                restoreHitAudio(__instance);
-            }
-        }
-        static void replaceHitAudioToBonk(Shovel shovel)
-        {
-            if (shovel == null)
-            {
-                AndysModsPlugin.Log.LogInfo("Rare Bonk: No Shovel? Who calls us?");
                 return;
             }
-            if (bonkSfx == null || bonkSfx.Length == 0)
+            if (__instance != null && __instance.shovelHitForce != OriginalShovelForce && __state != null && __state.Length != 0)
             {
-                AndysModsPlugin.Log.LogInfo("Rare Bonk: No BONK SFX has been found. Not changing shovel's sounds.");
-                return;
+                __instance.shovelHitForce = OriginalShovelForce;
+                __instance.hitSFX = __state;
+                AndysModsPlugin.Log.LogInfo($"Rare Bonk: restored original shovelHitForce.");
             }
-            originalSfx = shovel.hitSFX;
-            shovel.hitSFX = bonkSfx;
         }
 
-        static void restoreHitAudio(Shovel shovel)
+        [HarmonyPostfix, HarmonyPatch(typeof(GameNetworkManager), "Start")]
+        public static void AddBonkNetworkPrefab()
         {
-            if (shovel == null)
+            BonkNetworkPrefab.AddComponent<BonkNetworkHandler>();
+            NetworkManager.Singleton.AddNetworkPrefab(BonkNetworkPrefab);
+            AndysModsPlugin.Log.LogInfo($"Rare Bonk: added BonkNetworkHandler to NetworkManager.");
+        }
+
+        [HarmonyPostfix, HarmonyPatch(typeof(StartOfRound), "Awake")]
+        static void SpawnNetworkHandler()
+        {
+            GameObject networkHandlerHost = Object.Instantiate(BonkNetworkPrefab, Vector3.zero, Quaternion.identity);
+            networkHandlerHost.GetComponent<NetworkObject>().Spawn();
+        }
+
+    }
+
+    public class BonkNetworkHandler : NetworkBehaviour
+    {
+        public static BonkNetworkHandler Instance { get; private set; }
+
+        public override void OnNetworkSpawn()
+        {
+            AndysModsPlugin.Log.LogInfo("Rare Bonk: spawned network handler for sounds!");
+            Instance = this;
+            base.OnNetworkSpawn();
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void PlayBonkServerRpc(ulong shovelId)
+        {
+            if (!ModSettings.RareBonkMod.IsEnabled)
             {
-                AndysModsPlugin.Log.LogInfo("Rare Bonk: No Shovel? Who calls us?");
                 return;
             }
-            if (originalSfx == null || originalSfx.Length == 0)
-            {
-                AndysModsPlugin.Log.LogInfo("Rare Bonk: No original SFX for shovel found.");
-                return;
-            }
-            AndysModsPlugin.Log.LogInfo("Rare Bonk: Restored shovel's original SFX.");
-            shovel.hitSFX = originalSfx;
+            PlayBonkClientRpc(shovelId);
+        }
+
+        [ClientRpc]
+        public void PlayBonkClientRpc(ulong shovelId)
+        {
+            AndysModsPlugin.Log.LogInfo("Rare Bonk: client received BONK!");
+            NetworkManager.Singleton.SpawnManager.SpawnedObjects[shovelId].TryGetComponent(out Shovel shovel);
+            AndysModsPlugin.Log.LogInfo($"Rare Bonk: found shovel {shovel}!");
+            RoundManager.PlayRandomClip(shovel.shovelAudio, RareBonkPatch.BonkHitSfx);
         }
 
     }

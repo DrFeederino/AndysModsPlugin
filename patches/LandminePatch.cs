@@ -9,8 +9,8 @@ namespace AndysModsPlugin.patches
     internal static class LandminePatch
     {
         // Helper hash-set to detect an enemy we know. Needed for landmine. Postfix "(Clone)" is caused by game duplication.
-        internal static HashSet<string> knownEnemies = new HashSet<string>
-        {
+        internal static HashSet<string> knownEnemies =
+        [
             "MaskedPlayerEnemy(Clone)",
             "MaskedPlayerEnemy",
             "NutcrackerEnemy(Clone)",
@@ -37,7 +37,7 @@ namespace AndysModsPlugin.patches
             "PufferEnemy",
             "Crawler(Clone)",
             "Crawler",
-        };
+        ];
 
 
         /**
@@ -54,19 +54,21 @@ namespace AndysModsPlugin.patches
 
         [HarmonyPatch("OnTriggerEnter")]
         [HarmonyPrefix]
-        internal static bool OnTriggerEnter(Landmine __instance, Collider other)
+        internal static void OnTriggerEnter(Landmine __instance, Collider other, ref bool ___sendingExplosionRPC, ref float ___pressMineDebounceTimer)
         {
-            Traverse pressMineDebounceTimer = Traverse.Create(__instance).Field("pressMineDebounceTimer");
-            if (__instance.hasExploded || (float)pressMineDebounceTimer.GetValue() > 0f)
+            if (!ModSettings.LandmineMod.IsEnabled)
             {
-                return false;
+                return;
             }
-            triggerMineIfEnemy(__instance, other);
-            pressMineDebounceTimer.SetValue(0.5f);
-            return true;
+            if (__instance.hasExploded || ___pressMineDebounceTimer > 0f)
+            {
+                return;
+            }
+            TriggerMineIfEnemy(__instance, other, ref ___sendingExplosionRPC);
+            ___pressMineDebounceTimer = 0.5f;
         }
 
-        private static void triggerMineIfEnemy(Landmine __instance, Collider other)
+        private static void TriggerMineIfEnemy(Landmine __instance, Collider other, ref bool ___sendingExplosionRPC)
         {
             if (other == null) return;
             if (IsEnemy(other.transform.parent.gameObject))
@@ -75,7 +77,7 @@ namespace AndysModsPlugin.patches
                 if (!__instance.hasExploded)
                 {
                     __instance.SetOffMineAnimation();
-                    Traverse.Create(__instance).Field("sendingExplosionRPC").SetValue(true);
+                    ___sendingExplosionRPC = true;
                     __instance.ExplodeMineServerRpc();
                 }
 
@@ -84,14 +86,17 @@ namespace AndysModsPlugin.patches
 
         [HarmonyPatch("OnTriggerExit")]
         [HarmonyPrefix]
-        internal static bool OnTriggerExit(Landmine __instance, Collider other)
+        internal static void OnTriggerExit(Landmine __instance, Collider other, ref bool ___sendingExplosionRPC)
         {
+            if (!ModSettings.LandmineMod.IsEnabled)
+            {
+                return;
+            }
             if (__instance.hasExploded)
             {
-                return false;
+                return;
             }
-            triggerMineIfEnemy(__instance, other);
-            return true;
+            TriggerMineIfEnemy(__instance, other, ref ___sendingExplosionRPC);
         }
     }
 
