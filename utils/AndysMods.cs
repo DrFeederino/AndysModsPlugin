@@ -1,7 +1,8 @@
-﻿using HarmonyLib;
+﻿using AndysModsPlugin.mods.ModManager;
+using HarmonyLib;
 using UnityEngine;
 
-namespace AndysModsPlugin
+namespace AndysModsPlugin.utils
 {
     /**
      * Main class to enable all mods patches.
@@ -12,13 +13,11 @@ namespace AndysModsPlugin
         private readonly Harmony harmony = new(PluginInfo.PLUGIN_GUID);
         public void Init()
         {
-            AndysModsPlugin.Log.LogInfo("AndysMods is installed. Executing patches.");
+            AndysModsPlugin.Log.LogInfo("AndysMods is installed. Have fun!");
 
             harmony.PatchAll();
 
-            AndysModsPlugin.Log.LogInfo("Successfully added patches to game. Enjoy!");
-
-            ModSettings.RegisterChatCommands();
+            ModManager.RegisterChatCommands();
         }
     }
 

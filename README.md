@@ -1,5 +1,42 @@
 # Andy's Mods
-Personal list of custom-made mods for Lethal Company.
+Personal list of custom-made mods for Lethal Company, currently we serve:
+\
+*Command in chat - what you need to type in the ingame chat in order to disable/enable the particular mod.*
+### [ServerSide] Lethal Turrets
+\
+Turrets can target enemies too. Hell let loose!
+\
+**Command in chat**: "/turrets".
+### [ClientSide] Enable/Disable Mod
+\
+Lets the player enable/disable mods from this collection.
+\
+**Command in chat**: N/A.
+### [ClientSide/ServerSide] Quick Switch With 1/2/3/4
+\
+Quickly switch between item slots with 1/2/3/4 buttons! No more scrolling with the mouse.
+\
+**Command in chat**: "/quick".
+### [ServerSide] Lethal Landmines
+\
+Landmines can be triggered (read - exploded) by enemies. Nobody is safe!
+\
+**Command in chat**: "/mines"
+### [ClientSide] Rare Bonk
+\
+10% chance to bonk anyone with shovel. With power comes great responsibility!
+\
+**Command in chat**: "/bonk"
+# Note
+If you are using this mod with GameMasters, be aware chat commands won't work. This is due to how GameMasters work.
+# Release v1.5.0 (Happy New Year update):
+- **[ServerSide] Lethal Turrets (previously known as Turrets Are No Joke)**
+\
+Turrets can target enemies too. Hell let loose!
+- Fixes:
+    - Rare Bonk has seen some tweaks under the hood. As a a result, it now plays the original shovel sound as well as bonk sound.
+    - Quick Switch was causing player's desynchronization among host <-> client and client <-> client (e.g. Player A could have a shovel in hands, but nobody would see that because due to internal game network logic). This was resolved. 
+    - Mods for turrets and landmines have been renamed to "Lethal Turrets" and "Lethal Landmines" respectively. 
 # Release v1.4.0:
 - [ClientSide] Enable/Disable Mod
 \
@@ -8,7 +45,7 @@ Let the player enable/disable mods. To enable/disable mod, type in the chat:\
 /bonk - toggles Rare Bonk mod,\
 /landmine - toggles landmine mod.
 - Fixes:
-    - RareBonk is now [ServerSide] and all players can now hear it! Let the BONK begin!
+    - Rare Bonk is now [ServerSide] and all players can now hear it! Let the BONK begin!
 # Release v1.3.0:
 - [ClientSide] Quick Switch With 1/2/3/4
 \
@@ -18,7 +55,7 @@ Added ability to quickly switch between item slots with 1/2/3/4 buttons! No more
     - Markdown and typos are fixed here and there.
     - Rare Bonk failed to hook up to shovels, resulting in the broken game. Apologies.
 - Known issues:
-    - Rare bonk not playing for other players. Investigating possible solutions. For now, it is marked as [ClientSide].
+    - ~~Rare bonk not playing for other players. Investigating possible solutions. For now, it is marked as [ClientSide].~~ Fixed in 1.4.0 and above.
 # Release v1.2.0:
 - [ClientSide] Rare Bonk
 \
@@ -27,9 +64,6 @@ Added ability to quickly switch between item slots with 1/2/3/4 buttons! No more
 \
 Landmines can be triggered (read - exploded) by enemies. Nobody is safe!
 # Work in very hard progress
-- [ServerSide] Turrets Are No Joke
-\
-Turrets can target enemies too. Hell let loose!
 - [ServerSide] Masked Enemies are helpful?
 \
 Masked guys can bring loot too. Cute but dangerous!

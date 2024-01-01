@@ -2,41 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AndysModsPlugin.patches
+namespace AndysModsPlugin.mods.LethalLandmines
 {
     [HarmonyPatch(typeof(Landmine))]
     [HarmonyWrapSafe]
-    internal static class LandminePatch
+    internal static class LethalLandminesPatch
     {
-        // Helper hash-set to detect an enemy we know. Needed for landmine. Postfix "(Clone)" is caused by game duplication.
+        // Handy hash-set to detect an enemy we know. Needed for landmine. Postfix "(Clone)" is caused by game duplication.
         internal static HashSet<string> knownEnemies =
         [
             "MaskedPlayerEnemy(Clone)",
-            "MaskedPlayerEnemy",
             "NutcrackerEnemy(Clone)",
-            "NutcrackerEnemy",
             "BaboonHawkEnemy(Clone)",
-            "BaboonHawkEnemy",
             "Flowerman(Clone)",
-            "Flowerman",
             "SandSpider(Clone)",
-            "SandSpider",
             "Centipede(Clone)",
-            "Centipede",
             "SpringMan(Clone)",
-            "SpringMan",
             "DressGirl(Clone)",
-            "DressGirl",
             "HoarderBug(Clone)",
-            "HoarderBug",
             "Blob(Clone)",
-            "Blob",
             "JesterEnemy(Clone)",
-            "JesterEnemy",
             "PufferEnemy(Clone)",
-            "PufferEnemy",
-            "Crawler(Clone)",
-            "Crawler",
+            "Crawler(Clone)"
         ];
 
 
@@ -56,7 +43,7 @@ namespace AndysModsPlugin.patches
         [HarmonyPrefix]
         internal static void OnTriggerEnter(Landmine __instance, Collider other, ref bool ___sendingExplosionRPC, ref float ___pressMineDebounceTimer)
         {
-            if (!ModSettings.LandmineMod.IsEnabled)
+            if (!ModManager.ModManager.LethalLandmines.IsEnabled)
             {
                 return;
             }
@@ -70,8 +57,7 @@ namespace AndysModsPlugin.patches
 
         private static void TriggerMineIfEnemy(Landmine __instance, Collider other, ref bool ___sendingExplosionRPC)
         {
-            if (other == null) return;
-            if (IsEnemy(other.transform.parent.gameObject))
+            if (IsEnemy(other?.transform?.parent?.gameObject))
             {
                 AndysModsPlugin.Log.LogInfo($"Landmines Are No Joke: Triggering mine explosion for {other.transform.parent.gameObject}.");
                 if (!__instance.hasExploded)
@@ -88,7 +74,7 @@ namespace AndysModsPlugin.patches
         [HarmonyPrefix]
         internal static void OnTriggerExit(Landmine __instance, Collider other, ref bool ___sendingExplosionRPC)
         {
-            if (!ModSettings.LandmineMod.IsEnabled)
+            if (!ModManager.ModManager.LethalLandmines.IsEnabled)
             {
                 return;
             }

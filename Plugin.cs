@@ -1,4 +1,5 @@
-﻿using AndysModsPlugin.patches;
+﻿using AndysModsPlugin.mods.ModManager;
+using AndysModsPlugin.utils;
 using BepInEx;
 using BepInEx.Logging;
 using System.Reflection;
@@ -13,8 +14,6 @@ namespace AndysModsPlugin
     {
         internal static ManualLogSource Log;
         internal static string PluginPath;
-        internal static readonly ModSettings SettingsManager = new();
-        internal static readonly QuickSwitchInputClass quickSwitchInstance = QuickSwitchInputClass.Instance;
         private void Awake()
         {
             Log = Logger;

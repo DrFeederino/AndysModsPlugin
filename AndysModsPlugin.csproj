@@ -4,7 +4,7 @@
     <TargetFramework>net48</TargetFramework>
     <AssemblyName>AndysModsPlugin</AssemblyName>
     <Description>Collection of mods packaged with care and love by Andy aka "DrFeederino".</Description>
-    <Version>1.4.0</Version>
+    <Version>1.5.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -52,7 +52,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="cd C:\Users\kamaz\Documents\GitHub\NetcodePatcher-2.4.0\plugins\&#xD;&#xA;del * /q&#xD;&#xA;copy $(TargetPath) .&#xD;&#xA;copy $(TargetDir)*.pdb .&#xD;&#xA;cd ..&#xD;&#xA;NetcodePatcher.dll plugins/ deps/&#xD;&#xA;cd plugins/&#xD;&#xA;del $(ProjectName)_original.dll /q&#xD;&#xA;del $(ProjectName)_original.pdb /q&#xD;&#xA;copy /Y * C:\Users\kamaz\AppData\Roaming\r2modmanPlus-local\LethalCompany\profiles\Default\BepInEx\plugins\DrFeederino-AndysMods&#xD;&#xA;del * /q&#xD;&#xA;" />
+    <Exec Command="cd C:\Users\kamaz\Documents\GitHub\NetcodePatcher-2.4.0\plugins\&#xD;&#xA;del * /q&#xD;&#xA;copy $(TargetPath) .&#xD;&#xA;copy $(TargetDir)$(ProjectName).pdb .&#xD;&#xA;cd ..&#xD;&#xA;NetcodePatcher.dll plugins/ deps/&#xD;&#xA;cd plugins/&#xD;&#xA;del $(ProjectName)_original.dll /q&#xD;&#xA;del $(ProjectName)_original.pdb /q&#xD;&#xA;copy /Y * C:\Users\kamaz\AppData\Roaming\r2modmanPlus-local\LethalCompany\profiles\Default\BepInEx\plugins\DrFeederino-AndysMods&#xD;&#xA;del * /q&#xD;&#xA;" />
   </Target>
 
 </Project>
