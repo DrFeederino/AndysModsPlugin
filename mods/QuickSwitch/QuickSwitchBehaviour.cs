@@ -1,20 +1,18 @@
-﻿using GameNetcodeStuff;
-using HarmonyLib;
+﻿using HarmonyLib;
 using System.Reflection;
 using UnityEngine.InputSystem;
-using UnityEngine;
+using Unity.Netcode;
 
 namespace AndysModsPlugin.mods.QuickSwitch
 {
-    internal class QuickSwitchBehaviour : MonoBehaviour
+    internal class QuickSwitchBehaviour : NetworkBehaviour
     {
-        private PlayerControllerB player;
-
-        public void Awake()
+        public override void OnNetworkSpawn()
         {
             AndysModsPlugin.Log.LogInfo("Quick Switch: setting up keyboard callbacks.");
             SetupKeybindCallbacks();
             QuickSwitchInput.Instance.EnableModInputActions();
+            base.OnNetworkSpawn();
         }
 
         public void SetupKeybindCallbacks()
@@ -24,10 +22,9 @@ namespace AndysModsPlugin.mods.QuickSwitch
             QuickSwitchInput.Instance.QuickItemThirdKey.performed += OnThirdSwitchKeyPressed;
             QuickSwitchInput.Instance.QuickItemFourthKey.performed += OnFourthSwitchKeyPressed;
             AndysModsPlugin.Log.LogInfo("Quick Switch: input callbacks are set up.");
-
         }
 
-        public void OnDestroy()
+        public override void OnDestroy()
         {
             QuickSwitchInput.Instance.DisableModInputActions();
             QuickSwitchInput.Instance.QuickItemFirstKey.performed -= OnFirstSwitchKeyPressed;
@@ -35,34 +32,35 @@ namespace AndysModsPlugin.mods.QuickSwitch
             QuickSwitchInput.Instance.QuickItemThirdKey.performed -= OnThirdSwitchKeyPressed;
             QuickSwitchInput.Instance.QuickItemFourthKey.performed -= OnFourthSwitchKeyPressed;
             AndysModsPlugin.Log.LogInfo("Quick Switch: input callbacks are removed up.");
+            base.OnDestroy();
         }
 
         private void OnFirstSwitchKeyPressed(InputAction.CallbackContext context)
         {
             if (!context.performed) return;
-            ChangePlayerItemSlot(context, 0);
+            ChangePlayerItemSlot(0);
         }
         private void OnSecondSwitchKeyPressed(InputAction.CallbackContext context)
         {
             if (!context.performed) return;
-            ChangePlayerItemSlot(context, 1);
+            ChangePlayerItemSlot(1);
         }
         private void OnThirdSwitchKeyPressed(InputAction.CallbackContext context)
         {
             if (!context.performed) return;
-            ChangePlayerItemSlot(context, 2);
+            ChangePlayerItemSlot(2);
         }
         private void OnFourthSwitchKeyPressed(InputAction.CallbackContext context)
         {
             if (!context.performed) return;
-            ChangePlayerItemSlot(context, 3);
+            ChangePlayerItemSlot(3);
         }
 
         /**
          * Game supports only going forward or backwards by 1 slot. It is decided solely by reading float value of CallbackContext. For buttons its positive.
          * So, the idea is to trick the game that current slot is "pressed_key - 1" so it would go forward to it!
          */
-        private void ChangePlayerItemSlot(InputAction.CallbackContext context, int keyNum)
+        private void ChangePlayerItemSlot(int keyNum)
         {
             if (!QuickSwitchInput.QuickSwitchMod.IsEnabled)
             {
@@ -73,26 +71,40 @@ namespace AndysModsPlugin.mods.QuickSwitch
             {
                 QuickSwitchInput.Instance.EnableModInputActions();
             }
-            if (player == null || GameNetworkManager.Instance?.localPlayerController != player)
-            {
-                player = GameNetworkManager.Instance?.localPlayerController;
-                return;
-            }
-            if (player.inTerminalMenu)
+            if (GameNetworkManager.Instance?.localPlayerController == null)
             {
                 return;
             }
-
-            if (player.currentItemSlot != keyNum)
+            if (GameNetworkManager.Instance.localPlayerController.inTerminalMenu)
+            {
+                return;
+            }
+            var player = StartOfRound.Instance.localPlayerController;
+            var playerFields = Traverse.Create(player);
+            if (GameNetworkManager.Instance.localPlayerController.currentItemSlot != keyNum)
             {
                 // Original game logic to check if we can switch slots
-                if ((player.IsOwner && player.isPlayerControlled && (!player.IsServer || player.isHostPlayerObject) || player.isTestingPlayer) && !((float)Traverse.Create(player).Field("timeSinceSwitchingSlots").GetValue() < 0.3f) && !player.isGrabbingObjectAnimation && !player.quickMenuManager.isMenuOpen && !player.inSpecialInteractAnimation && !(bool)Traverse.Create(player).Field("throwingObject").GetValue() && !player.isTypingChat && !player.twoHanded && !player.activatingItem && !player.jetpackControls && !player.disablingJetpackControls)
+                if ((player.IsOwner && player.isPlayerControlled && (!player.IsServer || player.isHostPlayerObject) || player.isTestingPlayer) && !(playerFields.Field<float>("timeSinceSwitchingSlots").Value < 0.3f) && !player.isGrabbingObjectAnimation && !player.quickMenuManager.isMenuOpen && !player.inSpecialInteractAnimation && !playerFields.Field<bool>("throwingObject").Value && !player.isTypingChat && !player.twoHanded && !player.activatingItem && !player.jetpackControls && !player.disablingJetpackControls)
                 {
-                    //Fingers fucking crossed [ServerRpc] method won't blow up in my face for this one
-                    player.GetType().GetMethod("SwitchToItemSlot", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(player, [keyNum, null]);
-                    player.GetType().GetMethod("SwitchItemSlotsServerRpc", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(player, [true]);
+                    SwitchItemSlotsServerRpc(keyNum, GameNetworkManager.Instance.localPlayerController.NetworkObjectId);
                 }
             }
+        }
+
+
+        [ServerRpc(RequireOwnership = false)]
+        public void SwitchItemSlotsServerRpc(int slot, ulong playerId)
+        {
+            SwitchItemSlotsClientRpc(slot, playerId);
+        }
+
+        [ClientRpc]
+        public void SwitchItemSlotsClientRpc(int slot, ulong playerId)
+        {
+            StartOfRound.Instance.allPlayerScripts.DoIf(player => player.NetworkObjectId == playerId, player =>
+            {
+                player?.GetType().GetMethod("SwitchToItemSlot", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(player, [slot, null]);
+            });
         }
 
     }

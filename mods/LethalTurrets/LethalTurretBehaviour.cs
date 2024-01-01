@@ -17,8 +17,6 @@ namespace AndysModsPlugin.mods.LethalTurrets
         private Traverse fieldTraverser;
         private RaycastHit hit;
 
-        public static LethalTurretBehaviour Instance { get; private set; }
-
         public void HookupTurret(Turret turret)
         {
             this.turret = turret;
@@ -90,11 +88,12 @@ namespace AndysModsPlugin.mods.LethalTurrets
 
             return null;
         }
-        public static void TeleportPlayerToTurret()
-        {
-            GameNetworkManager.Instance.localPlayerController.transform.position = FindObjectOfType<Turret>().transform.position;
-            GameNetworkManager.Instance.localPlayerController.transform.position += Vector3.up;
-        }
+        //public static void TeleportPlayerToTurret()
+        //{
+        //    GameNetworkManager.Instance.localPlayerController.transform.position = FindObjectOfType<Turret>().transform.position;
+        //    GameNetworkManager.Instance.localPlayerController.transform.position += Vector3.up;
+        //}
+
         private void SetTargetToEnemy()
         {
             if (targetEnemy.isEnemyDead)
@@ -108,7 +107,7 @@ namespace AndysModsPlugin.mods.LethalTurrets
             else
             {
                 targetingDeadEnemy = false;
-                turret.targetTransform = targetEnemy.transform;
+                turret.targetTransform = targetEnemy.gameObject.transform;
             }
         }
 
@@ -131,7 +130,7 @@ namespace AndysModsPlugin.mods.LethalTurrets
                 fieldTraverser.Field<float>("lostLOSTimer").Value = 0f;
 
                 turret.tempTransform.position = turret.targetTransform.position;
-                turret.tempTransform.position += Vector3.up;
+                turret.tempTransform.position += Vector3.up * 0.6f;
                 turret.turnTowardsObjectCompass.LookAt(turret.tempTransform);
                 return;
             }
@@ -155,12 +154,12 @@ namespace AndysModsPlugin.mods.LethalTurrets
                 if (enemy != null)
                 {
                     targetEnemy = enemy;
-                    SwitchTargetedEnemyServerRpc(enemy.NetworkObjectId);
+                    SwitchTargetedEnemyClientRpc(enemy.NetworkObjectId);
                 }
                 else
                 {
                     enemy = null;
-                    RemoveTargetedEnemyServerRpc();
+                    RemoveTargetedEnemyClientRpc();
                 }
             }
         }
@@ -169,7 +168,12 @@ namespace AndysModsPlugin.mods.LethalTurrets
             if (turret == null)
             {
                 AndysModsPlugin.Log.LogInfo("Lethal turrets: tried to call on NULL turret.");
-                NetworkObject.Despawn(true);
+                if (NetworkObject.IsSpawned)
+                {
+                    AndysModsPlugin.Log.LogInfo("Lethal turrets: despawned network object for client.");
+                    NetworkObject.Despawn(true);
+                }
+                gameObject.SetActive(false);
                 Destroy(this);
                 return;
             }
@@ -271,7 +275,7 @@ namespace AndysModsPlugin.mods.LethalTurrets
                         {
                             targetEnemy = enemy;
                             SwitchTurretMode(1);
-                            SwitchTargetedEnemyServerRpc(enemy.NetworkObjectId, setModeToCharging: true);
+                            SwitchTargetedEnemyClientRpc(enemy.NetworkObjectId, setModeToCharging: true);
                         }
                         else if (playerControllerB != null && !playerControllerB.isPlayerDead)
                         {
@@ -318,7 +322,7 @@ namespace AndysModsPlugin.mods.LethalTurrets
                         if (!fieldTraverser.Field<bool>("hasLineOfSight").Value)
                         {
                             targetEnemy = null;
-                            RemoveTargetedEnemyServerRpc();
+                            RemoveTargetedEnemyClientRpc();
                         }
                         else
                         {
@@ -459,24 +463,18 @@ namespace AndysModsPlugin.mods.LethalTurrets
 
             turret.turretRod.rotation = Quaternion.RotateTowards(turret.turretRod.rotation, turret.turnTowardsObjectCompass.rotation, turret.rotationSpeed * Time.deltaTime);
         }
-
-        [ServerRpc(RequireOwnership = false)]
+        [ServerRpc]
         public void SpawnTurretServerRpc(ulong turretId)
         {
             SpawnTurretClientRpc(turretId);
         }
+
         [ClientRpc]
         public void SpawnTurretClientRpc(ulong turretId)
         {
             turret = NetworkManager.Singleton.SpawnManager.SpawnedObjects[turretId].gameObject.GetComponentInChildren<Turret>();
-            AndysModsPlugin.Log.LogInfo($"Lethal Turrets: spawning lethal turret for client {GameNetworkManager.Instance.localPlayerController?.playerUsername}.");
+            AndysModsPlugin.Log.LogInfo($"Lethal Turrets: spawning lethal turret for client {GameNetworkManager.Instance.localPlayerController?.playerUsername}, turret ID: {turret?.NetworkObjectId}.");
             HookupTurret(turret);
-        }
-
-        [ServerRpc]
-        private void RemoveTargetedEnemyServerRpc()
-        {
-            RemoveTargetedEnemyClientRpc();
         }
 
 
@@ -484,13 +482,6 @@ namespace AndysModsPlugin.mods.LethalTurrets
         private void RemoveTargetedEnemyClientRpc()
         {
             targetEnemy = null;
-        }
-
-
-        [ServerRpc(RequireOwnership = false)]
-        private void SwitchTargetedEnemyServerRpc(ulong networkObjectId, bool setModeToCharging = false)
-        {
-            SwitchTargetedEnemyClientRpc(networkObjectId, setModeToCharging);
         }
 
         [ClientRpc]

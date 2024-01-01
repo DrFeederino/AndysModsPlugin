@@ -1,4 +1,5 @@
 ﻿using AndysModsPlugin.mods.LethalTurrets;
+using AndysModsPlugin.mods.QuickSwitch;
 using AndysModsPlugin.utils;
 using HarmonyLib;
 using Unity.Netcode;
@@ -15,12 +16,14 @@ namespace AndysModsPlugin.mods.RareBonk
         public static void AddBonkNetworkPrefab()
         {
             AssetBundleClass.AndysModsNetworkPrefab.AddComponent<ModNetworkHandler>();
-            AndysModsPlugin.Log.LogInfo("Rare Bonk: added RareBonkNetworkHandler to custom network prefab.");
+            AssetBundleClass.AndysModsNetworkPrefab.AddComponent<QuickSwitchBehaviour>();
+            AndysModsPlugin.Log.LogInfo("Rare Bonk: added ModNetworkHandler and QuickSwitchBehaviour to custom network prefab.");
 
             AssetBundleClass.LethalTurretsNetworkPrefab.AddComponent<LethalTurretBehaviour>();
             AndysModsPlugin.Log.LogInfo("Lethal Turrets: added LethalTurretBehaviour to custom network prefab.");
 
             NetworkManager.Singleton.AddNetworkPrefab(AssetBundleClass.AndysModsNetworkPrefab);
+            NetworkManager.Singleton.AddNetworkPrefab(AssetBundleClass.LethalTurretsNetworkPrefab);
             AndysModsPlugin.Log.LogInfo("AndysModsPlugin: Custom NetworkPrefab was added to NetworkManager.");
         }
     }
@@ -33,6 +36,7 @@ namespace AndysModsPlugin.mods.RareBonk
         static void SpawnNetworkHandler()
         {
             GameObject networkHandlerHost = Object.Instantiate(AssetBundleClass.AndysModsNetworkPrefab, Vector3.zero, Quaternion.identity);
+            AndysModsPlugin.Log.LogInfo("AndysModsPlugin: Custom NetworkPrefab was created for client.");
             if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
             {
                 AndysModsPlugin.Log.LogInfo("AndysModsPlugin: Custom NetworkPrefab was spawned on the host.");
@@ -97,12 +101,17 @@ namespace AndysModsPlugin.mods.RareBonk
             AndysModsPlugin.Log.LogInfo($"Lethal Turrets: replacing turret with a more lethal version {GameNetworkManager.Instance.localPlayerController?.playerUsername}.");
             NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(turretId, out NetworkObject turretObject);
             Turret turret = turretObject.gameObject.GetComponentInChildren<Turret>();
-            GameObject networkHandlerHost = Instantiate(AssetBundleClass.LethalTurretsNetworkPrefab, turret.gameObject.transform.position, turret.gameObject.transform.rotation);
+            if (turret == null)
+            {
+                AndysModsPlugin.Log.LogInfo($"Lethal Turrets: can't spawn a NULL turret {GameNetworkManager.Instance.localPlayerController?.playerUsername}, turretID: {turretId}.");
+                return;
+            }
             if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
             {
+                GameObject networkHandlerHost = Instantiate(AssetBundleClass.LethalTurretsNetworkPrefab, turret.gameObject.transform.position, turret.gameObject.transform.rotation);
                 networkHandlerHost.GetComponent<NetworkObject>().Spawn(true);
+                networkHandlerHost.GetComponent<LethalTurretBehaviour>().SpawnTurretServerRpc(turret.NetworkObjectId);
             }
-            networkHandlerHost.GetComponent<LethalTurretBehaviour>().SpawnTurretServerRpc(turret.NetworkObjectId);
         }
 
         /**
