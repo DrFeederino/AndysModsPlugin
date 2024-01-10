@@ -51,28 +51,33 @@ namespace AndysModsPlugin.mods.LethalLandmines
             {
                 return;
             }
-            TriggerMineIfEnemy(__instance, other, ref ___sendingExplosionRPC);
-            ___pressMineDebounceTimer = 0.5f;
+            TriggerMineIfEnemy(__instance, other, ref ___sendingExplosionRPC, ref ___pressMineDebounceTimer, false);
         }
 
-        private static void TriggerMineIfEnemy(Landmine __instance, Collider other, ref bool ___sendingExplosionRPC)
+        private static void TriggerMineIfEnemy(Landmine __instance, Collider other, ref bool ___sendingExplosionRPC, ref float ___pressMineDebounceTimer, bool isExit)
         {
             if (IsEnemy(other?.transform?.parent?.gameObject))
             {
-                AndysModsPlugin.Log.LogInfo($"Landmines Are No Joke: Triggering mine explosion for {other.transform.parent.gameObject}.");
-                if (!__instance.hasExploded)
+                if (isExit)
                 {
+                    AndysModsPlugin.Log.LogInfo($"Lethal Landmines: OnTriggerExit mine explosion for {other.transform.parent.gameObject}.");
                     __instance.SetOffMineAnimation();
                     ___sendingExplosionRPC = true;
                     __instance.ExplodeMineServerRpc();
+                } else
+                {
+                    AndysModsPlugin.Log.LogInfo($"Lethal Landmines: OnTriggerEnter mine explosion for {other.transform.parent.gameObject}.");
+                    ___pressMineDebounceTimer = 0.5f;
+                    __instance.PressMineServerRpc();
                 }
+                
 
             }
         }
 
         [HarmonyPatch("OnTriggerExit")]
         [HarmonyPrefix]
-        internal static void OnTriggerExit(Landmine __instance, Collider other, ref bool ___sendingExplosionRPC)
+        internal static void OnTriggerExit(Landmine __instance, Collider other, ref bool ___sendingExplosionRPC, ref float ___pressMineDebounceTimer)
         {
             if (!ModManager.ModManager.LethalLandmines.IsEnabled)
             {
@@ -82,7 +87,7 @@ namespace AndysModsPlugin.mods.LethalLandmines
             {
                 return;
             }
-            TriggerMineIfEnemy(__instance, other, ref ___sendingExplosionRPC);
+            TriggerMineIfEnemy(__instance, other, ref ___sendingExplosionRPC, ref ___pressMineDebounceTimer, true);
         }
     }
 

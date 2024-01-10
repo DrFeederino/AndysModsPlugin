@@ -29,6 +29,10 @@ Landmines can be triggered (read - exploded) by enemies. Nobody is safe!
 **Command in chat**: "/bonk"
 # Note
 If you are using this mod with GameMasters, be aware chat commands won't work. This is due to how GameMasters work.
+# Release v1.5.2:
+- Fixes:
+    - This mod is fully compatible with v47 (aka v49 in game).
+    - Lethal Landmines has seen some reworks under the hood.
 # Release v1.5.1 (Happy New Year update):
 - Fixes:
     - Lethal Turrets now synchronize between server and clients properly and should work flawlessly.

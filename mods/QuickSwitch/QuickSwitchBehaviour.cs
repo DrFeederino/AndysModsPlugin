@@ -31,7 +31,7 @@ namespace AndysModsPlugin.mods.QuickSwitch
             QuickSwitchInput.Instance.QuickItemSecondKey.performed -= OnSecondSwitchKeyPressed;
             QuickSwitchInput.Instance.QuickItemThirdKey.performed -= OnThirdSwitchKeyPressed;
             QuickSwitchInput.Instance.QuickItemFourthKey.performed -= OnFourthSwitchKeyPressed;
-            AndysModsPlugin.Log.LogInfo("Quick Switch: input callbacks are removed up.");
+            AndysModsPlugin.Log.LogInfo("Quick Switch: input callbacks are removed.");
             base.OnDestroy();
         }
 
