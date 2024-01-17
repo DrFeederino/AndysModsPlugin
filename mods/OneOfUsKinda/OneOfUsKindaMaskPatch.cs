@@ -17,7 +17,7 @@ namespace AndysModsPlugin.mods.OneOfUsKinda
             }
             AndysModsPlugin.Log.LogInfo($"One Of Us: re-rolling mask attachment for player.");
             // 20% chance
-            return UnityEngine.Random.Range(0, 100) <= 20 ? true : false;
+            return UnityEngine.Random.Range(0, 100) <= 20;
         }
 
         [HarmonyPostfix, HarmonyPatch(typeof(EnemyAI), "CheckLineOfSightForPlayer")]
