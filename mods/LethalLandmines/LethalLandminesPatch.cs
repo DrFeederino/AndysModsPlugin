@@ -18,7 +18,9 @@ namespace AndysModsPlugin.mods.LethalLandmines
             "SandSpider(Clone)",
             "Centipede(Clone)",
             "SpringMan(Clone)",
-            "DressGirl(Clone)",
+            // Removed as per suggestion
+            // https://github.com/DrFeederino/AndysModsPlugin/issues/1
+            //"DressGirl(Clone)",
             "HoarderBug(Clone)",
             "Blob(Clone)",
             "JesterEnemy(Clone)",
@@ -64,13 +66,14 @@ namespace AndysModsPlugin.mods.LethalLandmines
                     __instance.SetOffMineAnimation();
                     ___sendingExplosionRPC = true;
                     __instance.ExplodeMineServerRpc();
-                } else
+                }
+                else
                 {
                     AndysModsPlugin.Log.LogInfo($"Lethal Landmines: OnTriggerEnter mine explosion for {other.transform.parent.gameObject}.");
                     ___pressMineDebounceTimer = 0.5f;
                     __instance.PressMineServerRpc();
                 }
-                
+
 
             }
         }

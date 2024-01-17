@@ -27,8 +27,19 @@ Landmines can be triggered (read - exploded) by enemies. Nobody is safe!
 10% chance to bonk anyone with shovel. With power comes great responsibility!
 \
 **Command in chat**: "/bonk"
+### [ClientSide] One Of Us, kinda
+\
+Masks now provide protection against enemies (no detection, no damage), but beware, don't become one of them!
+\
+**Command in chat**: "/mask"
 # Note
 If you are using this mod with GameMasters, be aware chat commands won't work. This is due to how GameMasters work.
+# Release v1.6.0:
+- **[ClientSide] One Of Us, kinda**
+\
+Masks now provide protection against enemies (no detection, no damage), but beware, don't become one of them!
+- Fixes:
+    - [As per suggestion in Github](https://github.com/DrFeederino/AndysModsPlugin/issues/1), Lethal Mines now don't trigger on the ghosty girls. _Thank you for the feedback, Diffle!_
 # Release v1.5.2:
 - Fixes:
     - This mod is fully compatible with v47 (aka v49 in game).

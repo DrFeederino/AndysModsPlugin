@@ -1,12 +1,12 @@
 ﻿using AndysModsPlugin.mods.LethalTurrets;
+using AndysModsPlugin.mods.ModManager;
 using AndysModsPlugin.mods.QuickSwitch;
-using AndysModsPlugin.utils;
 using HarmonyLib;
 using Unity.Netcode;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace AndysModsPlugin.mods.RareBonk
+namespace AndysModsPlugin.utils
 {
     [HarmonyPatch(typeof(GameNetworkManager))]
     [HarmonyWrapSafe]
@@ -22,9 +22,13 @@ namespace AndysModsPlugin.mods.RareBonk
             AssetBundleClass.LethalTurretsNetworkPrefab.AddComponent<LethalTurretBehaviour>();
             AndysModsPlugin.Log.LogInfo("Lethal Turrets: added LethalTurretBehaviour to custom network prefab.");
 
+            //AssetBundleClass.UsefulMaskedNetworkPrefab.AddComponent<UsefulMaskedBehaviour>();
+            //AndysModsPlugin.Log.LogInfo("Useful Masked: added UsefulMaskedBehaviour to custom network prefab.");
+
             NetworkManager.Singleton.AddNetworkPrefab(AssetBundleClass.AndysModsNetworkPrefab);
             NetworkManager.Singleton.AddNetworkPrefab(AssetBundleClass.LethalTurretsNetworkPrefab);
-            AndysModsPlugin.Log.LogInfo("AndysModsPlugin: Custom NetworkPrefab was added to NetworkManager.");
+            //NetworkManager.Singleton.AddNetworkPrefab(AssetBundleClass.UsefulMaskedNetworkPrefab);
+            AndysModsPlugin.Log.LogInfo("AndysModsPlugin: Custom NetworkPrefabs were added to NetworkManager.");
         }
     }
 
@@ -59,6 +63,16 @@ namespace AndysModsPlugin.mods.RareBonk
             }
         }
 
+        //[HarmonyPostfix, HarmonyPatch(typeof(MaskedPlayerEnemy), "Start")]
+        //[HarmonyWrapSafe]
+        //static void SpawnUsefulMaskedServer(MaskedPlayerEnemy __instance)
+        //{
+        //    if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
+        //    {
+        //        ModNetworkHandler.Instance.ReplaceMaskedBehaviourServerRpc(__instance.NetworkObjectId);
+        //    }
+        //}
+
     }
 
     /**
@@ -76,10 +90,49 @@ namespace AndysModsPlugin.mods.RareBonk
             base.OnNetworkSpawn();
         }
 
+        //[ServerRpc]
+        //public void ReplaceMaskedBehaviourServerRpc(ulong maskedId)
+        //{
+        //    if (!ModManager.UsefulMasked.IsEnabled)
+        //    {
+        //        return;
+        //    }
+        //    ReplaceMaskedBehaviourClientRpc(maskedId);
+        //}
+
+        //[ClientRpc]
+        //public void ReplaceMaskedBehaviourClientRpc(ulong maskedId)
+        //{
+        //    if (!ModManager.UsefulMasked.IsEnabled)
+        //    {
+        //        return;
+        //    }
+        //    ReplaceMaskedBehaviour(maskedId);
+        //}
+
+        //private void ReplaceMaskedBehaviour(ulong maskedId)
+        //{
+        //    AndysModsPlugin.Log.LogInfo($"Useful Masked: replacing spawned masked enemy with modified version for {GameNetworkManager.Instance.localPlayerController?.playerUsername}.");
+        //    NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(maskedId, out NetworkObject maskedObject);
+        //    MaskedPlayerEnemy masked = maskedObject.gameObject.GetComponentInChildren<MaskedPlayerEnemy>();
+        //    if (masked == null)
+        //    {
+        //        AndysModsPlugin.Log.LogInfo($"Useful Masked: can't spawn a NULL masked enemy {GameNetworkManager.Instance.localPlayerController?.playerUsername}, masked ID: {maskedId}.");
+        //        return;
+        //    }
+        //    if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
+        //    {
+        //        GameObject networkHandlerHost = Instantiate(AssetBundleClass.UsefulMaskedNetworkPrefab, masked.gameObject.transform.position, masked.gameObject.transform.rotation);
+        //        networkHandlerHost.GetComponent<NetworkObject>().Spawn(true);
+        //        //networkHandlerHost.GetComponent<UsefulMaskedBehaviour>().SpawnMaskedServerRpc(masked.NetworkObjectId);
+        //    }
+
+        //}
+
         [ServerRpc]
         public void ReplaceTurretServerRpc(ulong turretId)
         {
-            if (!ModManager.ModManager.LethalTurrets.IsEnabled)
+            if (!ModManager.LethalTurrets.IsEnabled)
             {
                 return;
             }
@@ -89,7 +142,7 @@ namespace AndysModsPlugin.mods.RareBonk
         [ClientRpc]
         public void ReplaceTurretClientRpc(ulong turretId)
         {
-            if (!ModManager.ModManager.LethalTurrets.IsEnabled)
+            if (!ModManager.LethalTurrets.IsEnabled)
             {
                 return;
             }
@@ -120,7 +173,7 @@ namespace AndysModsPlugin.mods.RareBonk
         [ServerRpc(RequireOwnership = false)]
         public void PlayBonkServerRpc(ulong shovelId)
         {
-            if (!ModManager.ModManager.RareBonk.IsEnabled)
+            if (!ModManager.RareBonk.IsEnabled)
             {
                 return;
             }

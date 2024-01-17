@@ -1,11 +1,11 @@
 {
   "name": "AndysMods",
-  "version_number": "1.5.2",
+  "version_number": "1.6.0",
   "website_url": "https://github.com/DrFeederino/AndysModsPlugin",
-  "description": "V47 compatible.",
+  "description": "New release: One of Us, kinda - wearing a mask makes you a disguised enemy (no damage and no detection), use it with caution.",
   "dependencies": [
     "BepInEx-BepInExPack-5.4.2100",
-    "Rune580-LethalCompany_InputUtils-0.4.3",
-    "2018-LC_API-3.1.0"
+    "Rune580-LethalCompany_InputUtils-0.5.5",
+    "2018-LC_API-3.4.4"
   ]
 }

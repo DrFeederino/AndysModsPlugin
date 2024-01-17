@@ -1,8 +1,4 @@
-﻿using AndysModsPlugin.mods.LethalTurrets;
-using AndysModsPlugin.mods.RareBonk;
-using HarmonyLib;
-using Unity.Netcode;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace AndysModsPlugin.utils
 {
@@ -12,7 +8,7 @@ namespace AndysModsPlugin.utils
         public static readonly AudioClip[] BonkHitSfx = AndysModsAssetBundle.LoadAssetWithSubAssets<AudioClip>("bonk.mp3");
         public static readonly GameObject AndysModsNetworkPrefab = AndysModsAssetBundle.LoadAsset<GameObject>("AndysModsNetworkHandler");
         public static readonly GameObject LethalTurretsNetworkPrefab = AndysModsAssetBundle.LoadAsset<GameObject>("LethalTurretsNetworkPrefab");
-
+        public static readonly GameObject UsefulMaskedNetworkPrefab = AndysModsAssetBundle.LoadAsset<GameObject>("UsefulMaskedNetworkPrefab");
     }
-    
+
 }

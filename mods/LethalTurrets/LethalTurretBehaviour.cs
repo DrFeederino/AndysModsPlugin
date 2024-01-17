@@ -88,11 +88,6 @@ namespace AndysModsPlugin.mods.LethalTurrets
 
             return null;
         }
-        //public static void TeleportPlayerToTurret()
-        //{
-        //    GameNetworkManager.Instance.localPlayerController.transform.position = FindObjectOfType<Turret>().transform.position;
-        //    GameNetworkManager.Instance.localPlayerController.transform.position += Vector3.up;
-        //}
 
         private void SetTargetToEnemy()
         {

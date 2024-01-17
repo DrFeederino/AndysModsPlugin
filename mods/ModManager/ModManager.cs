@@ -10,14 +10,14 @@ namespace AndysModsPlugin.mods.ModManager
         public static readonly ToggleModClass RareBonk = new();
         public static readonly ToggleModClass LethalLandmines = new();
         public static readonly ToggleModClass LethalTurrets = new();
+        public static readonly ToggleModClass OneOfUsKinda = new();
         private static readonly Dictionary<string, System.Action<string[]>> AvailableCommands = new()
         {
             { "bonk", (_) => ToggleMod("bonk") },
             { "quick", (_) => ToggleMod("quick") },
             { "turrets", (_) => ToggleMod("turrets") },
-            // Debug command for Lethal Turrets
-            //{ "tur" , (_) => LethalTurretBehaviour.TeleportPlayerToTurret() },
-            { "mines", (_) => ToggleMod("mines") }
+            { "mines", (_) => ToggleMod("mines") },
+            { "mask", (_) => ToggleMod("mask") }
         };
 
         public static void ToggleMod(string mod)
@@ -39,6 +39,10 @@ namespace AndysModsPlugin.mods.ModManager
                 case "turrets":
                     LethalTurrets.Toggle();
                     AndysModsPlugin.Log.LogInfo($"ModToggleEnabler: Lethal Turrets is {(LethalLandmines.IsEnabled ? "enabled" : "disabled")}!");
+                    break;
+                case "masked":
+                    OneOfUsKinda.Toggle();
+                    AndysModsPlugin.Log.LogInfo($"ModToggleEnabler: Useful Masked is {(OneOfUsKinda.IsEnabled ? "enabled" : "disabled")}!");
                     break;
                 default:
                     AndysModsPlugin.Log.LogInfo($"ModToggleEnabler: unrecognized mod {mod}. Ignoring.");
