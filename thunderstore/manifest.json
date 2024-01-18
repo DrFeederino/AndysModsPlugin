@@ -1,8 +1,8 @@
 {
   "name": "AndysMods",
-  "version_number": "1.6.0",
+  "version_number": "1.7.0",
   "website_url": "https://github.com/DrFeederino/AndysModsPlugin",
-  "description": "New release: One of Us, kinda - wearing a mask makes you a disguised enemy (no damage and no detection), use it with caution.",
+  "description": "New release: Optimal Sells - quickly place the required for quota scrap on the company counter with terminal command.",
   "dependencies": [
     "BepInEx-BepInExPack-5.4.2100",
     "Rune580-LethalCompany_InputUtils-0.5.5",

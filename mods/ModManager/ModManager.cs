@@ -11,13 +11,15 @@ namespace AndysModsPlugin.mods.ModManager
         public static readonly ToggleModClass LethalLandmines = new();
         public static readonly ToggleModClass LethalTurrets = new();
         public static readonly ToggleModClass OneOfUsKinda = new();
+        public static readonly ToggleModClass OptimalSells = new();
         private static readonly Dictionary<string, System.Action<string[]>> AvailableCommands = new()
         {
             { "bonk", (_) => ToggleMod("bonk") },
             { "quick", (_) => ToggleMod("quick") },
             { "turrets", (_) => ToggleMod("turrets") },
             { "mines", (_) => ToggleMod("mines") },
-            { "mask", (_) => ToggleMod("mask") }
+            { "mask", (_) => ToggleMod("mask") },
+            { "sell", (_) => ToggleMod("sell") }
         };
 
         public static void ToggleMod(string mod)
@@ -40,9 +42,13 @@ namespace AndysModsPlugin.mods.ModManager
                     LethalTurrets.Toggle();
                     AndysModsPlugin.Log.LogInfo($"ModToggleEnabler: Lethal Turrets is {(LethalLandmines.IsEnabled ? "enabled" : "disabled")}!");
                     break;
-                case "masked":
+                case "mask":
                     OneOfUsKinda.Toggle();
-                    AndysModsPlugin.Log.LogInfo($"ModToggleEnabler: Useful Masked is {(OneOfUsKinda.IsEnabled ? "enabled" : "disabled")}!");
+                    AndysModsPlugin.Log.LogInfo($"ModToggleEnabler: One Of Us is {(OneOfUsKinda.IsEnabled ? "enabled" : "disabled")}!");
+                    break;
+                case "sell":
+                    OptimalSells.Toggle();
+                    AndysModsPlugin.Log.LogInfo($"ModToggleEnabler: Optimal Sells is {(OneOfUsKinda.IsEnabled ? "enabled" : "disabled")}!");
                     break;
                 default:
                     AndysModsPlugin.Log.LogInfo($"ModToggleEnabler: unrecognized mod {mod}. Ignoring.");

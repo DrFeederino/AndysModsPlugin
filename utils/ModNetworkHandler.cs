@@ -1,5 +1,6 @@
 ﻿using AndysModsPlugin.mods.LethalTurrets;
 using AndysModsPlugin.mods.ModManager;
+using AndysModsPlugin.mods.OptimizeMySellsPatch;
 using AndysModsPlugin.mods.QuickSwitch;
 using HarmonyLib;
 using Unity.Netcode;
@@ -23,7 +24,7 @@ namespace AndysModsPlugin.utils
             AndysModsPlugin.Log.LogInfo("Lethal Turrets: added LethalTurretBehaviour to custom network prefab.");
 
             //AssetBundleClass.UsefulMaskedNetworkPrefab.AddComponent<UsefulMaskedBehaviour>();
-            //AndysModsPlugin.Log.LogInfo("Useful Masked: added UsefulMaskedBehaviour to custom network prefab.");
+            //AndysModsPlugin.Log.LogInfo("Optimal Sell: added OptimalSellBehaviour to custom network prefab.");
 
             NetworkManager.Singleton.AddNetworkPrefab(AssetBundleClass.AndysModsNetworkPrefab);
             NetworkManager.Singleton.AddNetworkPrefab(AssetBundleClass.LethalTurretsNetworkPrefab);
@@ -63,15 +64,15 @@ namespace AndysModsPlugin.utils
             }
         }
 
-        //[HarmonyPostfix, HarmonyPatch(typeof(MaskedPlayerEnemy), "Start")]
-        //[HarmonyWrapSafe]
-        //static void SpawnUsefulMaskedServer(MaskedPlayerEnemy __instance)
-        //{
-        //    if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
-        //    {
-        //        ModNetworkHandler.Instance.ReplaceMaskedBehaviourServerRpc(__instance.NetworkObjectId);
-        //    }
-        //}
+        ////[HarmonyPostfix, HarmonyPatch(typeof(MaskedPlayerEnemy), "Start")]
+        ////[HarmonyWrapSafe]
+        ////static void SpawnUsefulMaskedServer(MaskedPlayerEnemy __instance)
+        ////{
+        ////    if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
+        ////    {
+        ////        ModNetworkHandler.Instance.ReplaceMaskedBehaviourServerRpc(__instance.NetworkObjectId);
+        ////    }
+        ////}
 
     }
 
@@ -129,6 +130,9 @@ namespace AndysModsPlugin.utils
 
         //}
 
+        /**
+         * Server RPC method to replace game spawned turrets with modded versions on the host and clients
+         */
         [ServerRpc]
         public void ReplaceTurretServerRpc(ulong turretId)
         {
@@ -165,6 +169,60 @@ namespace AndysModsPlugin.utils
                 networkHandlerHost.GetComponent<NetworkObject>().Spawn(true);
                 networkHandlerHost.GetComponent<LethalTurretBehaviour>().SpawnTurretServerRpc(turret.NetworkObjectId);
             }
+        }
+
+        /**
+         * Server RPC method for Optimal Sells
+         */
+        [ServerRpc(RequireOwnership = false)]
+        public void SellScrapServerRpc(ulong[] soldItems)
+        {
+            SellScrapClientRpc(soldItems);
+        }
+
+        [ClientRpc]
+        public void SellScrapClientRpc(ulong[] soldItems)
+        {
+            SellScrapLocally(soldItems);
+        }
+
+        public void SellScrapLocally(ulong[] soldItems)
+        {
+            AndysModsPlugin.Log.LogInfo("Optimal Sell: selling items to the company.");
+            DepositItemsDesk desk = FindObjectOfType<DepositItemsDesk>();
+            soldItems.Do(itemId =>
+            {
+                NetworkObject item = PlaceObjectOnDesk(itemId, desk);
+                desk?.AddObjectToDeskServerRpc(item);
+            });
+        }
+
+        private NetworkObject PlaceObjectOnDesk(ulong itemId, DepositItemsDesk desk)
+        {
+            Vector3 positionOffset = RoundManager.RandomPointInBounds(desk.triggerCollider.bounds);
+            positionOffset.y = desk.triggerCollider.bounds.min.y;
+            if (Physics.Raycast(new Ray(positionOffset + Vector3.up * 3f, Vector3.down), out var hitInfo, 8f, 1048640, QueryTriggerInteraction.Collide))
+            {
+                positionOffset = hitInfo.point;
+            }
+            NetworkObject item = NetworkManager.Singleton.SpawnManager.SpawnedObjects[itemId].gameObject.GetComponent<NetworkObject>();
+            GrabbableObject grabbyItem = item.gameObject.GetComponentInChildren<GrabbableObject>();
+            positionOffset.y += grabbyItem.itemProperties.verticalOffset;
+            positionOffset = desk.deskObjectsContainer.transform.InverseTransformPoint(positionOffset);
+            grabbyItem.EnablePhysics(enable: true);
+            grabbyItem.EnableItemMeshes(enable: true);
+            grabbyItem.isHeld = false;
+            grabbyItem.isPocketed = false;
+            grabbyItem.heldByPlayerOnServer = false;
+            grabbyItem.parentObject = null;
+            grabbyItem.transform.SetParent(desk.deskObjectsContainer.transform, worldPositionStays: true);
+            grabbyItem.startFallingPosition = grabbyItem.transform.localPosition;
+            grabbyItem.transform.localScale = grabbyItem.originalScale;
+            grabbyItem.transform.localPosition = positionOffset;
+            grabbyItem.targetFloorPosition = positionOffset;
+            grabbyItem.fallTime = 0f;
+            grabbyItem.OnPlaceObject();
+            return item;
         }
 
         /**

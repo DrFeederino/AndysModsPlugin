@@ -27,15 +27,26 @@ Landmines can be triggered (read - exploded) by enemies. Nobody is safe!
 10% chance to bonk anyone with shovel. With power comes great responsibility!
 \
 **Command in chat**: "/bonk"
-### [ClientSide] One Of Us, kinda
+### [ClientSide] One Of Us, Kinda
 \
 Masks now provide protection against enemies (no detection, no damage), but beware, don't become one of them!
 \
 **Command in chat**: "/mask"
+### [ClientSide] Optimal Sells
+\
+New terminal command to optimize one's scrap sells to the company! Type *sell* in the terminal to quickly place minimum required scrap on the counter and hit the quota. Type *sell -all* to quickly place all your items on the desk counter of the the company for sell.
+\
+**Command in chat**: "/sell"
 # Note
 If you are using this mod with GameMasters, be aware chat commands won't work. This is due to how GameMasters work.
+# Release v1.7.0:
+- **[ClientSide] Optimal Sells**
+\
+New terminal command to optimize one's scrap sells to the company! Type *sell* in the terminal to quickly place minimum required scrap on the counter and hit the quota. Type *sell -all* to quickly place all your items on the desk counter of the the company for sell.
+- Fixes:
+    - Command chat for One Of Us, Kinda was expected "/masked" instead of "/mask". Oops.
 # Release v1.6.0:
-- **[ClientSide] One Of Us, kinda**
+- **[ClientSide] One Of Us, Kinda**
 \
 Masks now provide protection against enemies (no detection, no damage), but beware, don't become one of them!
 - Fixes:
