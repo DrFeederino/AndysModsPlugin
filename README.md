@@ -43,7 +43,7 @@ If you are using this mod with GameMasters, be aware chat commands won't work. T
 __By default, all mods are enabled__.
 # Release v1.8.0:
 - Updates:
-    - Mod Manager now supports configuration file and display neatly a message when mod is either enabled/disabled. Plugin configuration file can be found under "BepInEx\config" folder. Look for the file "AndysModsPlugin.cfg";
+    - Mod Manager now supports configuration file and display neatly a message when mod is either enabled/disabled. Plugin configuration file can be found under "BepInEx\config" folder. Look for the file "AndysModsPlugin.cfg" (make sure to launch the game at least once, otherwise it won't be there);
     - Completely new icon for the mod, made by my dear friend @bunnymoon!
 - Fixes:
     - Optimize Sells will now sell scrap that lies in the ship and not in the player's hands or inventory. This addresses the issue when selling all stuff causes the player to have corrupted inventory state, and inability to drop the phantom scrap item.
