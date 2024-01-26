@@ -16,12 +16,12 @@ namespace AndysModsPlugin.mods.QuickSwitch
         [InputAction("<Keyboard>/4", Name = "Change Player Item Slot #4")]
         public InputAction QuickItemFourthKey { get; set; }
         public static readonly QuickSwitchInput Instance = new();
-        public static readonly ToggleModClass QuickSwitchMod = new();
+        public static readonly ToggleModClass QuickSwitchMod = new("Quick Switch");
 
         public void ToggleMod()
         {
             QuickSwitchMod.Toggle();
-            if (QuickSwitchMod.IsEnabled)
+            if (QuickSwitchMod.enabled.Value)
             {
                 EnableModInputActions();
             }
@@ -57,7 +57,7 @@ namespace AndysModsPlugin.mods.QuickSwitch
 
         public void EnableModInputActions()
         {
-            if (QuickSwitchMod.IsEnabled)
+            if (QuickSwitchMod.enabled.Value)
             {
                 AndysModsPlugin.Log.LogInfo("Quick Switch: enabling mod's inputs.");
                 Enable();

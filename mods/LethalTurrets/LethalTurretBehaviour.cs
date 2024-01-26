@@ -16,6 +16,7 @@ namespace AndysModsPlugin.mods.LethalTurrets
         private Turret turret;
         private Traverse fieldTraverser;
         private RaycastHit hit;
+        private static int TurretLayerMask = 11012424;
 
         public void HookupTurret(Turret turret)
         {
@@ -67,8 +68,9 @@ namespace AndysModsPlugin.mods.LethalTurrets
             for (int i = 0; i <= 6; i++)
             {
                 fieldTraverser.Field<Ray>("shootRay").Value = new Ray(turret.centerPoint.position, forward);
-                if (Physics.Raycast(fieldTraverser.Field<Ray>("shootRay").Value, out hit, 30f, (1 << 19), QueryTriggerInteraction.Collide))
+                if (Physics.Raycast(fieldTraverser.Field<Ray>("shootRay").Value, out hit, 30f, TurretLayerMask, QueryTriggerInteraction.Collide))
                 {
+                    AndysModsPlugin.Log.LogInfo($"We hit: {hit.transform.gameObject.name}");
                     if (!hit.transform.TryGetComponent(out EnemyAICollisionDetect enemyAICollision))
                     {
                         return null;
@@ -116,6 +118,8 @@ namespace AndysModsPlugin.mods.LethalTurrets
 
             if (Physics.Linecast(turret.aimPoint.position, turret.targetTransform.position, StartOfRound.Instance.collidersAndRoomMask, QueryTriggerInteraction.Ignore))
             {
+                AndysModsPlugin.Log.LogInfo($"We hit: {hit.transform.gameObject.name}");
+
                 flag = false;
             }
 
@@ -360,8 +364,10 @@ namespace AndysModsPlugin.mods.LethalTurrets
                         DamageEnemyIfInSight();
 
                         fieldTraverser.Field<Ray>("shootRay").Value = new Ray(turret.aimPoint.position, turret.aimPoint.forward);
-                        if (Physics.Raycast(fieldTraverser.Field<Ray>("shootRay").Value, out hit, 30f, StartOfRound.Instance.collidersAndRoomMask, QueryTriggerInteraction.Ignore))
+                        if (Physics.Raycast(fieldTraverser.Field<Ray>("shootRay").Value, out hit, 30f, TurretLayerMask, QueryTriggerInteraction.Collide))
                         {
+                            AndysModsPlugin.Log.LogInfo($"We hit: {hit.transform.gameObject.name}");
+
                             turret.bulletCollisionAudio.transform.position = fieldTraverser.Field<Ray>("shootRay").Value.GetPoint(hit.distance - 0.5f);
                         }
                     }
@@ -421,8 +427,10 @@ namespace AndysModsPlugin.mods.LethalTurrets
                         DamageEnemyIfInSight();
 
                         fieldTraverser.Field<Ray>("shootRay").Value = new Ray(turret.aimPoint.position, turret.aimPoint.forward);
-                        if (Physics.Raycast(fieldTraverser.Field<Ray>("shootRay").Value, out hit, 30f, StartOfRound.Instance.collidersAndRoomMask, QueryTriggerInteraction.Ignore))
+                        if (Physics.Raycast(fieldTraverser.Field<Ray>("shootRay").Value, out hit, 30f, TurretLayerMask, QueryTriggerInteraction.Collide))
                         {
+                            AndysModsPlugin.Log.LogInfo($"We hit: {hit.transform.gameObject.name}");
+
                             turret.bulletCollisionAudio.transform.position = fieldTraverser.Field<Ray>("shootRay").Value.GetPoint(hit.distance - 0.5f);
                         }
                     }

@@ -17,7 +17,7 @@ namespace AndysModsPlugin.utils
 
             harmony.PatchAll();
 
-            ModManager.RegisterChatCommands();
+            ModManager.Init();
         }
     }
 

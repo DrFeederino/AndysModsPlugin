@@ -11,7 +11,7 @@ namespace AndysModsPlugin.mods.OneOfUsKinda
         [HarmonyWrapSafe]
         internal static bool RerollLuckForPlayer()
         {
-            if (!ModManager.ModManager.OneOfUsKinda.IsEnabled)
+            if (!ModManager.ModManager.OneOfUsKinda.enabled.Value)
             {
                 return true;
             }
@@ -24,7 +24,7 @@ namespace AndysModsPlugin.mods.OneOfUsKinda
         [HarmonyWrapSafe]
         internal static void CheckLineOfSightForPlayerPatch(ref PlayerControllerB __result)
         {
-            if (!ModManager.ModManager.OneOfUsKinda.IsEnabled)
+            if (!ModManager.ModManager.OneOfUsKinda.enabled.Value)
             {
                 return;
             }
@@ -36,7 +36,7 @@ namespace AndysModsPlugin.mods.OneOfUsKinda
         [HarmonyWrapSafe]
         internal static void CheckLineOfSightForClosestPlayerPatch(ref PlayerControllerB __result)
         {
-            if (!ModManager.ModManager.OneOfUsKinda.IsEnabled)
+            if (!ModManager.ModManager.OneOfUsKinda.enabled.Value)
             {
                 return;
             }
@@ -47,7 +47,7 @@ namespace AndysModsPlugin.mods.OneOfUsKinda
         [HarmonyWrapSafe]
         internal static void PlayerIsTargetablePatch(PlayerControllerB playerScript, ref bool __result)
         {
-            if (!ModManager.ModManager.OneOfUsKinda.IsEnabled)
+            if (!ModManager.ModManager.OneOfUsKinda.enabled.Value)
             {
                 return;
             }

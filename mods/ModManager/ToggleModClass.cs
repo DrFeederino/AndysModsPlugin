@@ -1,9 +1,13 @@
-﻿namespace AndysModsPlugin.mods.ModToggle
+﻿using BepInEx.Configuration;
+
+namespace AndysModsPlugin.mods.ModToggle
 {
     public class ToggleModClass
     {
-        public bool IsEnabled = true; // default state of all mods
-        public void Toggle() => IsEnabled = !IsEnabled;
+        public ConfigEntry<bool> enabled; // default state of all mods
+        public string name = null;
+        public ToggleModClass(string name) { this.name = name; }
+        public void Toggle() => enabled.Value = !enabled.Value;
     }
 
 }

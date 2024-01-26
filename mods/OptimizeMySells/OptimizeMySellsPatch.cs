@@ -26,7 +26,7 @@ namespace AndysModsPlugin.mods.OptimizeMySellsPatch
             string secondWord = textArray.Length > 1 ? textArray[1] : "";
             if (firstWord.Contains("sell"))
             {
-                if (!ModManager.ModManager.OptimalSells.IsEnabled)
+                if (!ModManager.ModManager.OptimalSells.enabled.Value)
                 {
                     node = CreateTerminalNode("Optimal Sells mod is disabled. Enable it via command chat \"/sell\".\n\n");
                     return;
@@ -56,8 +56,17 @@ namespace AndysModsPlugin.mods.OptimizeMySellsPatch
         {
             // first find all scrap on the ship
             List<GrabbableObject> sellingScrap = (from gameObject in GameObject.Find("/Environment/HangarShip").GetComponentsInChildren<GrabbableObject>()
-                                                  where gameObject.name != "ClipboardManual" && gameObject.name != "StickyNoteItem"
+                                                  where gameObject.name != "ClipboardManual" && 
+                                                  gameObject.name != "StickyNoteItem" && 
+                                                  gameObject.name != "KeyItem" && 
+                                                  !gameObject.isBeingUsed && 
+                                                  !gameObject.isHeld && 
+                                                  !gameObject.isHeldByEnemy && 
+                                                  !gameObject.isHeld && 
+                                                  gameObject.itemProperties.isScrap && 
+                                                  !gameObject.isPocketed
                                                   select gameObject).ToList();
+            AndysModsPlugin.Log.LogInfo($"{sellingScrap[0]}");
             sellingScrap.Sort((firstItem, secondItem) => firstItem.scrapValue <= secondItem.scrapValue ? 1 : 0);
 
             string[] profitText = StartOfRound.Instance.profitQuotaMonitorText.text.Split('/');
@@ -65,7 +74,6 @@ namespace AndysModsPlugin.mods.OptimizeMySellsPatch
             int.TryParse(profitText[1].Trim().Substring(1), out int neededQuota);
             int scrapSum = 0;
             float paycheck = 0;
-            AndysModsPlugin.Log.LogInfo($"Current quota is {currentQuota}, we need {neededQuota}. Full text is {StartOfRound.Instance.profitQuotaMonitorText.text}");
             if (isSellingAll)
             {
                 scrapSum = sellingScrap.Sum(item => item.scrapValue);

@@ -15,7 +15,7 @@ namespace AndysModsPlugin.mods.RareBonk
         [HarmonyPrefix]
         static void PatchBonkShovel(Shovel __instance)
         {
-            if (!ModManager.ModManager.RareBonk.IsEnabled)
+            if (!ModManager.ModManager.RareBonk.enabled.Value)
             {
                 return;
             }
@@ -32,7 +32,7 @@ namespace AndysModsPlugin.mods.RareBonk
         [HarmonyPostfix]
         static void RemovePatchShovel(Shovel __instance)
         {
-            if (!ModManager.ModManager.RareBonk.IsEnabled)
+            if (!ModManager.ModManager.RareBonk.enabled.Value)
             {
                 return;
             }

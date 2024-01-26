@@ -45,7 +45,7 @@ namespace AndysModsPlugin.mods.LethalLandmines
         [HarmonyPrefix]
         internal static void OnTriggerEnter(Landmine __instance, Collider other, ref bool ___sendingExplosionRPC, ref float ___pressMineDebounceTimer)
         {
-            if (!ModManager.ModManager.LethalLandmines.IsEnabled)
+            if (!ModManager.ModManager.LethalLandmines.enabled.Value)
             {
                 return;
             }
@@ -82,7 +82,7 @@ namespace AndysModsPlugin.mods.LethalLandmines
         [HarmonyPrefix]
         internal static void OnTriggerExit(Landmine __instance, Collider other, ref bool ___sendingExplosionRPC, ref float ___pressMineDebounceTimer)
         {
-            if (!ModManager.ModManager.LethalLandmines.IsEnabled)
+            if (!ModManager.ModManager.LethalLandmines.enabled.Value)
             {
                 return;
             }

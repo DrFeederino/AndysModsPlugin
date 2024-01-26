@@ -4,7 +4,7 @@
     <TargetFramework>net48</TargetFramework>
     <AssemblyName>AndysModsPlugin</AssemblyName>
     <Description>Collection of mods packaged with care and love by Andy aka "DrFeederino".</Description>
-    <Version>1.7.0</Version>
+    <Version>1.8.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -39,7 +39,7 @@
       <HintPath>..\..\..\AppData\Roaming\r2modmanPlus-local\LethalCompany\profiles\Default\BepInEx\plugins\2018-LC_API\LC_API.dll</HintPath>
     </Reference>
     <Reference Include="LethalCompanyInputUtils">
-      <HintPath>..\Rune580-LethalCompany_InputUtils-0.4.3\LethalCompanyInputUtils\LethalCompanyInputUtils.dll</HintPath>
+      <HintPath>..\..\..\AppData\Roaming\r2modmanPlus-local\LethalCompany\profiles\Default\BepInEx\plugins\Rune580-LethalCompany_InputUtils\LethalCompanyInputUtils\LethalCompanyInputUtils.dll</HintPath>
     </Reference>
     <Reference Include="netstandard" />
     <Reference Include="Unity.InputSystem">

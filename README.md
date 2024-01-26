@@ -32,15 +32,25 @@ Landmines can be triggered (read - exploded) by enemies. Nobody is safe!
 Masks now provide protection against enemies (no detection, no damage), but beware, don't become one of them!
 \
 **Command in chat**: "/mask"
-### [ClientSide] Optimal Sells
+### [ServerSide] Optimal Sells
 \
 New terminal command to optimize one's scrap sells to the company! Type *sell* in the terminal to quickly place minimum required scrap on the counter and hit the quota. Type *sell -all* to quickly place all your items on the desk counter of the the company for sell.
 \
 **Command in chat**: "/sell"
 # Note
 If you are using this mod with GameMasters, be aware chat commands won't work. This is due to how GameMasters work.
+\
+__By default, all mods are enabled__.
+# Release v1.8.0:
+- Updates:
+    - Mod Manager now supports configuration file and display neatly a message when mod is either enabled/disabled. Plugin configuration file can be found under "BepInEx\config" folder. Look for the file "AndysModsPlugin.cfg";
+    - Completely new icon for the mod, made by my dear friend @bunnymoon!
+- Fixes:
+    - Optimize Sells will now sell scrap that lies in the ship and not in the player's hands or inventory. This addresses the issue when selling all stuff causes the player to have corrupted inventory state, and inability to drop the phantom scrap item.
+    - Lethal Turrets has a new layer mask for physics casting. This should address the issue when turret targets the enemy through the wall.
+    - Optimal Sells was incorrectly marked as ClientSide mod due to copy-paste error. It is ServerSide mod.
 # Release v1.7.0:
-- **[ClientSide] Optimal Sells**
+- **[ServerSide] Optimal Sells**
 \
 New terminal command to optimize one's scrap sells to the company! Type *sell* in the terminal to quickly place minimum required scrap on the counter and hit the quota. Type *sell -all* to quickly place all your items on the desk counter of the the company for sell.
 - Fixes:

@@ -62,7 +62,7 @@ namespace AndysModsPlugin.mods.QuickSwitch
          */
         private void ChangePlayerItemSlot(int keyNum)
         {
-            if (!QuickSwitchInput.QuickSwitchMod.IsEnabled)
+            if (!QuickSwitchInput.QuickSwitchMod.enabled.Value)
             {
                 QuickSwitchInput.Instance.DisableModInputActions();
                 return;

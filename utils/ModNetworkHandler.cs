@@ -136,7 +136,7 @@ namespace AndysModsPlugin.utils
         [ServerRpc]
         public void ReplaceTurretServerRpc(ulong turretId)
         {
-            if (!ModManager.LethalTurrets.IsEnabled)
+            if (!ModManager.LethalTurrets.enabled.Value)
             {
                 return;
             }
@@ -146,7 +146,7 @@ namespace AndysModsPlugin.utils
         [ClientRpc]
         public void ReplaceTurretClientRpc(ulong turretId)
         {
-            if (!ModManager.LethalTurrets.IsEnabled)
+            if (!ModManager.LethalTurrets.enabled.Value)
             {
                 return;
             }
@@ -231,7 +231,7 @@ namespace AndysModsPlugin.utils
         [ServerRpc(RequireOwnership = false)]
         public void PlayBonkServerRpc(ulong shovelId)
         {
-            if (!ModManager.RareBonk.IsEnabled)
+            if (!ModManager.RareBonk.enabled.Value)
             {
                 return;
             }
