@@ -8,7 +8,7 @@
 
 //namespace AndysModsPlugin.mods.UsefulMasked
 //{
-//    internal class UsefulMaskedBehaviour : NetworkBehaviour
+//    internal class UsefulMaskedBehaviour : EnemyAI
 //    {
 //        private AISearchRoutine searchForItems;
 //        private MaskedPlayerEnemy masked;
