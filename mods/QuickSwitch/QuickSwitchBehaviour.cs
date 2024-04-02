@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using System.Reflection;
-using UnityEngine.InputSystem;
 using Unity.Netcode;
+using UnityEngine.InputSystem;
 
 namespace AndysModsPlugin.mods.QuickSwitch
 {

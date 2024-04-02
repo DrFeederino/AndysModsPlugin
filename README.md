@@ -41,6 +41,13 @@ New terminal command to optimize one's scrap sells to the company! Type *sell* i
 If you are using this mod with GameMasters, be aware chat commands won't work. This is due to how GameMasters work.
 \
 __By default, all mods are enabled__.
+# Release v1.8.2:
+- Fixes:
+    - Mod supports latest beta (v50);
+    - Lethal Turrets should now disable properly when firing at enemy;
+    - Optimal Sells wouldn't work when no scrap was found;
+    - Optimal Sells will now sell stickies and clipboard;
+    - Quick Switch now supports latest InputUtils mod (v0.7.3).
 # Release v1.8.1:
 - Fixes:
     - Lethal Turrets wouldn't target enemies;

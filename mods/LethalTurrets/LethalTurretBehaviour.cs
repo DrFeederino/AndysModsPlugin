@@ -60,7 +60,7 @@ namespace AndysModsPlugin.mods.LethalTurrets
             turret.bulletCollisionAudio.Stop();
         }
 
-        public EnemyAI CheckForEnemyInSight(float radius = 2f)
+        public EnemyAI CheckForEnemyInSight(float radius = 3f)
         {
             Vector3 forward = turret.aimPoint.forward;
             forward = Quaternion.Euler(0f, (0f - turret.rotationRange) / radius, 0f) * forward;
@@ -126,7 +126,7 @@ namespace AndysModsPlugin.mods.LethalTurrets
                 fieldTraverser.Field<float>("lostLOSTimer").Value = 0f;
 
                 turret.tempTransform.position = turret.targetTransform.position;
-                turret.tempTransform.position += Vector3.up * 0.6f;
+                turret.tempTransform.position += Vector3.up * 0.5f;
                 turret.turnTowardsObjectCompass.LookAt(turret.tempTransform);
                 return;
             }
@@ -160,6 +160,8 @@ namespace AndysModsPlugin.mods.LethalTurrets
                 }
             }
         }
+
+
         private void Update()
         {
             if (turret == null)
@@ -181,6 +183,15 @@ namespace AndysModsPlugin.mods.LethalTurrets
                 turret.turretMode = TurretMode.Detection;
                 turret.targetPlayerWithRotation = null;
                 targetEnemy = null;
+                turret.mainAudio.Stop();
+                turret.farAudio.Stop();
+                turret.berserkAudio.Stop();
+                turret.bulletParticles.Stop(withChildren: true, ParticleSystemStopBehavior.StopEmitting);
+                turret.bulletCollisionAudio.Play();
+                if (fieldTraverser.Field<Coroutine>("fadeBulletAudioCoroutine").Value != null)
+                {
+                    StopCoroutine(fieldTraverser.Field<Coroutine>("fadeBulletAudioCoroutine").Value);
+                }
                 return;
             }
 

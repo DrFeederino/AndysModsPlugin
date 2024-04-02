@@ -1,6 +1,5 @@
 ﻿using AndysModsPlugin.mods.LethalTurrets;
 using AndysModsPlugin.mods.ModManager;
-using AndysModsPlugin.mods.OptimizeMySellsPatch;
 using AndysModsPlugin.mods.QuickSwitch;
 using HarmonyLib;
 using Unity.Netcode;

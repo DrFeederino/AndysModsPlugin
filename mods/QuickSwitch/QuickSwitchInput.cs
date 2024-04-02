@@ -35,7 +35,7 @@ namespace AndysModsPlugin.mods.QuickSwitch
         {
             if (playerInput == null)
             {
-                playerInput = IngamePlayerSettings.Instance.playerInput;
+                playerInput = IngamePlayerSettings.Instance?.playerInput;
             }
             AndysModsPlugin.Log.LogInfo("Quick Switch: disabling all known InputActions to avoid collisions.");
             playerInput?.actions.FindAction("Emote1", false)?.Disable();

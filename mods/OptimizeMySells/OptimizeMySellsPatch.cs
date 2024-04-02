@@ -22,8 +22,8 @@ namespace AndysModsPlugin.mods.OptimizeMySellsPatch
         {
 
             string[] textArray = fullText.ToLower().Split();
-            string firstWord = textArray[0];
-            string secondWord = textArray.Length > 1 ? textArray[1] : "";
+            string firstWord = textArray[0].Trim();
+            string secondWord = textArray.Length > 1 ? textArray[1].Trim() : "";
             if (firstWord.Contains("sell"))
             {
                 if (!ModManager.ModManager.OptimalSells.enabled.Value)
@@ -56,17 +56,14 @@ namespace AndysModsPlugin.mods.OptimizeMySellsPatch
         {
             // first find all scrap on the ship
             List<GrabbableObject> sellingScrap = (from gameObject in GameObject.Find("/Environment/HangarShip").GetComponentsInChildren<GrabbableObject>()
-                                                  where gameObject.name != "ClipboardManual" && 
-                                                  gameObject.name != "StickyNoteItem" && 
-                                                  gameObject.name != "KeyItem" && 
-                                                  !gameObject.isBeingUsed && 
-                                                  !gameObject.isHeld && 
-                                                  !gameObject.isHeldByEnemy && 
-                                                  !gameObject.isHeld && 
-                                                  gameObject.itemProperties.isScrap && 
+                                                  where gameObject.name != "KeyItem" &&
+                                                  !gameObject.isBeingUsed &&
+                                                  !gameObject.isHeld &&
+                                                  !gameObject.isHeldByEnemy &&
+                                                  !gameObject.isHeld &&
+                                                  gameObject.itemProperties.isScrap &&
                                                   !gameObject.isPocketed
                                                   select gameObject).ToList();
-            AndysModsPlugin.Log.LogInfo($"{sellingScrap[0]}");
             sellingScrap.Sort((firstItem, secondItem) => firstItem.scrapValue <= secondItem.scrapValue ? 1 : 0);
 
             string[] profitText = StartOfRound.Instance.profitQuotaMonitorText.text.Split('/');

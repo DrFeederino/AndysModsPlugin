@@ -1,11 +1,11 @@
 {
   "name": "AndysMods",
-  "version_number": "1.8.1",
+  "version_number": "1.8.2",
   "website_url": "https://github.com/DrFeederino/AndysModsPlugin",
-  "description": "New release: Optimal Sells - quickly place the required for quota scrap on the company counter with terminal command.",
+  "description": "V50 COMPATIBLE",
   "dependencies": [
     "BepInEx-BepInExPack-5.4.2100",
-    "Rune580-LethalCompany_InputUtils-0.6.0",
+    "Rune580-LethalCompany_InputUtils-0.7.3",
     "2018-LC_API-3.4.5"
   ]
 }

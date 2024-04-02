@@ -1,5 +1,4 @@
-﻿using AndysModsPlugin.mods.ModManager;
-using AndysModsPlugin.utils;
+﻿using AndysModsPlugin.utils;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
@@ -11,6 +10,7 @@ namespace AndysModsPlugin
 
     [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
     [BepInProcess("Lethal Company.exe")]
+    [BepInDependency("com.rune580.LethalCompanyInputUtils", BepInDependency.DependencyFlags.HardDependency)]
     public sealed class AndysModsPlugin : BaseUnityPlugin
     {
         internal static ManualLogSource Log;
@@ -29,7 +29,7 @@ namespace AndysModsPlugin
             Log.LogInfo($"Path to plugin is: {PluginPath}");
             NetcodeWeaver();
         }
-        
+
         public void BindConfig<T>(ref ConfigEntry<T> config, string section, string key, T defaultValue, string description = "")
         {
             config = Config.Bind(section, key, defaultValue, description);
