@@ -114,16 +114,3 @@ Added ability to quickly switch between item slots with 1/2/3/4 buttons! No more
 - [ServerSide] Landmines Are No Joke
 \
 Landmines can be triggered (read - exploded) by enemies. Nobody is safe!
-# Work in very hard progress
-- [ServerSide] Masked Enemies are helpful?
-\
-Masked guys can bring loot too. Cute but dangerous!
-- [ClientSide] Bring it on, Mask!
-\
-You can A/D to release yourself from the grabby hands of masked guys. Zap-gun now stuns them! Hope you can make it in one piece!
-- [ServerSide] Chest to rule them all!
-\
-Adds a purchasable chest. It can store all the scrap you brought in the ship. It shows the full price of all sellable items.
-- [ServerSide] Is Company fr?
-\
-Items can arrive broken from the shop and break during use for a short-term.
