@@ -41,6 +41,9 @@ New terminal command to optimize one's scrap sells to the company! Type *sell* i
 If you are using this mod with GameMasters, be aware chat commands won't work. This is due to how GameMasters work.
 \
 __By default, all mods are enabled__.
+# Release v1.8.3:
+- Fixes:
+    - Lethal Turrets should now aim and shoot at enemies properly at expense of it being done through walls, more work will be done in the later patches.
 # Release v1.8.2:
 - Fixes:
     - Mod supports latest beta (v50);

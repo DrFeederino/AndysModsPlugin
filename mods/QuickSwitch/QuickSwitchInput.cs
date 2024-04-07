@@ -15,6 +15,10 @@ namespace AndysModsPlugin.mods.QuickSwitch
         public InputAction QuickItemThirdKey { get; set; }
         [InputAction("<Keyboard>/4", Name = "Change Player Item Slot #4")]
         public InputAction QuickItemFourthKey { get; set; }
+
+        //[InputAction("<Keyboard>/5", Name = "Disable all turrets")]
+        //public InputAction DisableTurrets { get; set; }
+
         public static readonly QuickSwitchInput Instance = new();
         public static readonly ToggleModClass QuickSwitchMod = new("Quick Switch");
 

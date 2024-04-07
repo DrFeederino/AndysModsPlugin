@@ -68,17 +68,17 @@ namespace AndysModsPlugin.mods.LethalTurrets
             for (int i = 0; i <= 6; i++)
             {
                 fieldTraverser.Field<Ray>("shootRay").Value = new Ray(turret.centerPoint.position, forward);
-                if (Physics.Raycast(fieldTraverser.Field<Ray>("shootRay").Value, out hit, 30f, TurretLayerMask, QueryTriggerInteraction.Collide))
+                // nerf the distance a bit to compensate for layer mask
+                if (Physics.Raycast(fieldTraverser.Field<Ray>("shootRay").Value, out hit, 20f, 524288, QueryTriggerInteraction.Collide))
                 {
-                    if (!hit.transform.TryGetComponent(out EnemyAICollisionDetect enemyAICollision))
+                    if (!hit.collider.TryGetComponent(out EnemyAICollisionDetect enemy))
                     {
                         return null;
                     }
 
-                    EnemyAI component = enemyAICollision.mainScript;
-                    if (component != null && !component.isEnemyDead && component.enemyType.canDie)
+                    if (enemy.mainScript != null && !enemy.mainScript.isEnemyDead && enemy.mainScript.enemyType.canDie)
                     {
-                        return component;
+                        return enemy.mainScript;
                     }
 
                     continue;
@@ -103,7 +103,14 @@ namespace AndysModsPlugin.mods.LethalTurrets
             else
             {
                 targetingDeadEnemy = false;
-                turret.targetTransform = targetEnemy.gameObject.transform;
+                var colliders = targetEnemy.gameObject.GetComponentsInChildren<BoxCollider>();
+                foreach (var collider in colliders)
+                {
+                    if (collider.tag.Equals("Enemy"))
+                    {
+                        turret.targetTransform = collider.gameObject.transform;
+                    }
+                }
             }
         }
 
@@ -125,8 +132,15 @@ namespace AndysModsPlugin.mods.LethalTurrets
                 fieldTraverser.Field<bool>("hasLineOfSight").Value = true;
                 fieldTraverser.Field<float>("lostLOSTimer").Value = 0f;
 
-                turret.tempTransform.position = turret.targetTransform.position;
-                turret.tempTransform.position += Vector3.up * 0.5f;
+                var colliders = targetEnemy.gameObject.GetComponentsInChildren<BoxCollider>();
+                foreach (var collider in colliders)
+                {
+                    if (collider.tag.Equals("Enemy"))
+                    {
+                        turret.tempTransform.position = collider.bounds.center;
+                    }
+                }
+                turret.tempTransform.position += Vector3.up;
                 turret.turnTowardsObjectCompass.LookAt(turret.tempTransform);
                 return;
             }
@@ -186,8 +200,8 @@ namespace AndysModsPlugin.mods.LethalTurrets
                 turret.mainAudio.Stop();
                 turret.farAudio.Stop();
                 turret.berserkAudio.Stop();
+                turret.bulletCollisionAudio.Stop();
                 turret.bulletParticles.Stop(withChildren: true, ParticleSystemStopBehavior.StopEmitting);
-                turret.bulletCollisionAudio.Play();
                 if (fieldTraverser.Field<Coroutine>("fadeBulletAudioCoroutine").Value != null)
                 {
                     StopCoroutine(fieldTraverser.Field<Coroutine>("fadeBulletAudioCoroutine").Value);
@@ -504,10 +518,15 @@ namespace AndysModsPlugin.mods.LethalTurrets
 
         private void DamageEnemyIfInSight()
         {
-            if (CheckForEnemyInSight(3f) == targetEnemy && targetEnemy != null && !targetEnemy.isEnemyDead)
+            var enemy = CheckForEnemyInSight(3f);
+            if (enemy != null && targetEnemy != null && targetEnemy.name == enemy.name && !targetEnemy.isEnemyDead)
             {
-                int dealtDamage = hit.distance >= 3f ? 1 : 2;
+                int dealtDamage = hit.distance >= 3f ? 2 : 3;
+                AndysModsPlugin.Log.LogInfo($"Lethal Turrets: hitting {targetEnemy.name} for {dealtDamage} by turret ID: {turret?.NetworkObjectId}.");
                 targetEnemy.HitEnemy(dealtDamage, null, false);
+            } else
+            {
+                AndysModsPlugin.Log.LogWarning($"Lethal Turrets: can't see {targetEnemy.name} to damage by turret ID: {turret?.NetworkObjectId}, sighted enemy is {enemy.name}, id {enemy.GetInstanceID()} and target enemy is {targetEnemy.name}, id {targetEnemy.GetInstanceID()}, are they equal {enemy == targetEnemy}, enemy is dead {targetEnemy.isEnemyDead}. Please report it to developer of the mod.");
             }
         }
 

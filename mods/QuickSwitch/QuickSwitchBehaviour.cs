@@ -21,6 +21,8 @@ namespace AndysModsPlugin.mods.QuickSwitch
             QuickSwitchInput.Instance.QuickItemSecondKey.performed += OnSecondSwitchKeyPressed;
             QuickSwitchInput.Instance.QuickItemThirdKey.performed += OnThirdSwitchKeyPressed;
             QuickSwitchInput.Instance.QuickItemFourthKey.performed += OnFourthSwitchKeyPressed;
+            //QuickSwitchInput.Instance.DisableTurrets.performed += OnDisableTurretsKeyPressed;
+            
             AndysModsPlugin.Log.LogInfo("Quick Switch: input callbacks are set up.");
         }
 
@@ -31,6 +33,8 @@ namespace AndysModsPlugin.mods.QuickSwitch
             QuickSwitchInput.Instance.QuickItemSecondKey.performed -= OnSecondSwitchKeyPressed;
             QuickSwitchInput.Instance.QuickItemThirdKey.performed -= OnThirdSwitchKeyPressed;
             QuickSwitchInput.Instance.QuickItemFourthKey.performed -= OnFourthSwitchKeyPressed;
+            //QuickSwitchInput.Instance.DisableTurrets.performed -= OnDisableTurretsKeyPressed;
+
             AndysModsPlugin.Log.LogInfo("Quick Switch: input callbacks are removed.");
             base.OnDestroy();
         }
@@ -55,6 +59,15 @@ namespace AndysModsPlugin.mods.QuickSwitch
             if (!context.performed) return;
             ChangePlayerItemSlot(3);
         }
+
+        //private void OnDisableTurretsKeyPressed(InputAction.CallbackContext context)
+        //{
+        //    if (!context.performed) return;
+        //    foreach (var turret in UnityEngine.GameObject.FindObjectsByType<Turret>(sortMode: UnityEngine.FindObjectsSortMode.InstanceID))
+        //    {
+        //        turret.ToggleTurretEnabled(enabled: !turret.turretActive);
+        //    };
+        //}
 
         /**
          * Game supports only going forward or backwards by 1 slot. It is decided solely by reading float value of CallbackContext. For buttons its positive.
