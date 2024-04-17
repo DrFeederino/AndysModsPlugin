@@ -41,6 +41,9 @@ New terminal command to optimize one's scrap sells to the company! Type *sell* i
 If you are using this mod with GameMasters, be aware chat commands won't work. This is due to how GameMasters work.
 \
 __By default, all mods are enabled__.
+# Release v1.8.5:
+- Fixes:
+    - Bumped up version of LC_API_V50.
 # Release v1.8.4:
 - Fixes:
     - Lethal Turrets now aims at enemies properly respecting walls and doesn't trigger on nearby enemies through walls;
