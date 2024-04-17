@@ -41,6 +41,11 @@ New terminal command to optimize one's scrap sells to the company! Type *sell* i
 If you are using this mod with GameMasters, be aware chat commands won't work. This is due to how GameMasters work.
 \
 __By default, all mods are enabled__.
+# For users of original LC_API:
+__Please disable or remove the mod as it can lead to issues with provided release of this mod.__
+# Release v1.8.6:
+- Fixes:
+    - Bumped up version of LC_API_V50 and fixed issue that would result in player not able to move.
 # Release v1.8.5:
 - Fixes:
     - Bumped up version of LC_API_V50.
