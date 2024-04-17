@@ -22,12 +22,8 @@ namespace AndysModsPlugin.utils
             AssetBundleClass.LethalTurretsNetworkPrefab.AddComponent<LethalTurretBehaviour>();
             AndysModsPlugin.Log.LogInfo("Lethal Turrets: added LethalTurretBehaviour to custom network prefab.");
 
-            //AssetBundleClass.UsefulMaskedNetworkPrefab.AddComponent<UsefulMaskedBehaviour>();
-            //AndysModsPlugin.Log.LogInfo("Optimal Sell: added OptimalSellBehaviour to custom network prefab.");
-
             NetworkManager.Singleton.AddNetworkPrefab(AssetBundleClass.AndysModsNetworkPrefab);
             NetworkManager.Singleton.AddNetworkPrefab(AssetBundleClass.LethalTurretsNetworkPrefab);
-            //NetworkManager.Singleton.AddNetworkPrefab(AssetBundleClass.UsefulMaskedNetworkPrefab);
             AndysModsPlugin.Log.LogInfo("AndysModsPlugin: Custom NetworkPrefabs were added to NetworkManager.");
         }
     }
@@ -63,16 +59,6 @@ namespace AndysModsPlugin.utils
             }
         }
 
-        ////[HarmonyPostfix, HarmonyPatch(typeof(MaskedPlayerEnemy), "Start")]
-        ////[HarmonyWrapSafe]
-        ////static void SpawnUsefulMaskedServer(MaskedPlayerEnemy __instance)
-        ////{
-        ////    if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
-        ////    {
-        ////        ModNetworkHandler.Instance.ReplaceMaskedBehaviourServerRpc(__instance.NetworkObjectId);
-        ////    }
-        ////}
-
     }
 
     /**
@@ -89,45 +75,6 @@ namespace AndysModsPlugin.utils
             Instance = this;
             base.OnNetworkSpawn();
         }
-
-        //[ServerRpc]
-        //public void ReplaceMaskedBehaviourServerRpc(ulong maskedId)
-        //{
-        //    if (!ModManager.UsefulMasked.IsEnabled)
-        //    {
-        //        return;
-        //    }
-        //    ReplaceMaskedBehaviourClientRpc(maskedId);
-        //}
-
-        //[ClientRpc]
-        //public void ReplaceMaskedBehaviourClientRpc(ulong maskedId)
-        //{
-        //    if (!ModManager.UsefulMasked.IsEnabled)
-        //    {
-        //        return;
-        //    }
-        //    ReplaceMaskedBehaviour(maskedId);
-        //}
-
-        //private void ReplaceMaskedBehaviour(ulong maskedId)
-        //{
-        //    AndysModsPlugin.Log.LogInfo($"Useful Masked: replacing spawned masked enemy with modified version for {GameNetworkManager.Instance.localPlayerController?.playerUsername}.");
-        //    NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(maskedId, out NetworkObject maskedObject);
-        //    MaskedPlayerEnemy masked = maskedObject.gameObject.GetComponentInChildren<MaskedPlayerEnemy>();
-        //    if (masked == null)
-        //    {
-        //        AndysModsPlugin.Log.LogInfo($"Useful Masked: can't spawn a NULL masked enemy {GameNetworkManager.Instance.localPlayerController?.playerUsername}, masked ID: {maskedId}.");
-        //        return;
-        //    }
-        //    if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
-        //    {
-        //        GameObject networkHandlerHost = Instantiate(AssetBundleClass.UsefulMaskedNetworkPrefab, masked.gameObject.transform.position, masked.gameObject.transform.rotation);
-        //        networkHandlerHost.GetComponent<NetworkObject>().Spawn(true);
-        //        //networkHandlerHost.GetComponent<UsefulMaskedBehaviour>().SpawnMaskedServerRpc(masked.NetworkObjectId);
-        //    }
-
-        //}
 
         /**
          * Server RPC method to replace game spawned turrets with modded versions on the host and clients

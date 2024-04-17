@@ -30,27 +30,27 @@ namespace AndysModsPlugin.mods.ModManager
             {
                 case "bonk":
                     RareBonk.Toggle();
-                    displayMessage = $"{RareBonk.name} is {(RareBonk.enabled.Value ? "enabled" : "disabled")}!";
+                    displayMessage = $"{RareBonk.name} is {(RareBonk.enabled.Value ? "enabled" : "disabled")}";
                     break;
                 case "quick":
                     QuickSwitchInput.Instance.ToggleMod();
-                    displayMessage = $"{QuickSwitchInput.QuickSwitchMod.name} is {(QuickSwitchInput.QuickSwitchMod.enabled.Value ? "enabled" : "disabled")}!";
+                    displayMessage = $"{QuickSwitchInput.QuickSwitchMod.name} is {(QuickSwitchInput.QuickSwitchMod.enabled.Value ? "enabled" : "disabled")}";
                     break;
                 case "mines":
                     LethalLandmines.Toggle();
-                    displayMessage = $"{LethalLandmines.name} is {(LethalLandmines.enabled.Value ? "enabled" : "disabled")}!";
+                    displayMessage = $"{LethalLandmines.name} is {(LethalLandmines.enabled.Value ? "enabled" : "disabled")}";
                     break;
                 case "turrets":
                     LethalTurrets.Toggle();
-                    displayMessage = $"{LethalTurrets.name} is {(LethalTurrets.enabled.Value ? "enabled" : "disabled")}!";
+                    displayMessage = $"{LethalTurrets.name} is {(LethalTurrets.enabled.Value ? "enabled" : "disabled")}";
                     break;
                 case "mask":
                     OneOfUsKinda.Toggle();
-                    displayMessage = $"{OneOfUsKinda.name} is {(OneOfUsKinda.enabled.Value ? "enabled" : "disabled")}!";
+                    displayMessage = $"{OneOfUsKinda.name} is {(OneOfUsKinda.enabled.Value ? "enabled" : "disabled")}";
                     break;
                 case "sell":
                     OptimalSells.Toggle();
-                    displayMessage = $"{OptimalSells.name}  is {(OptimalSells.enabled.Value ? "enabled" : "disabled")}!";
+                    displayMessage = $"{OptimalSells.name}  is {(OptimalSells.enabled.Value ? "enabled" : "disabled")}";
                     break;
                 default:
                     displayMessage = $"Unrecognized mod {mod}. Ignoring.";

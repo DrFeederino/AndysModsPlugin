@@ -10,7 +10,7 @@ namespace AndysModsPlugin.utils
     public class AndysMods : MonoBehaviour
     {
 
-        private readonly Harmony harmony = new(PluginInfo.PLUGIN_GUID);
+        private readonly Harmony harmony = new(MyPluginInfo.PLUGIN_GUID);
         public void Init()
         {
             AndysModsPlugin.Log.LogInfo("AndysMods is installed. Have fun!");

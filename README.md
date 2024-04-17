@@ -41,6 +41,11 @@ New terminal command to optimize one's scrap sells to the company! Type *sell* i
 If you are using this mod with GameMasters, be aware chat commands won't work. This is due to how GameMasters work.
 \
 __By default, all mods are enabled__.
+# Release v1.8.4:
+- Fixes:
+    - Lethal Turrets is now aims at enemies properly respecting walls and doesn't trigger on nearby enemies through walls;
+    - Landmines has seen some behind-the-scenes re-work to better detect enemies now and in the future;
+    - This version uses custom re-built version of LC_API for now that works with V50. 
 # Release v1.8.3:
 - Fixes:
     - Lethal Turrets should now aim and shoot at enemies properly at expense of it being done through walls, more work will be done in the later patches.

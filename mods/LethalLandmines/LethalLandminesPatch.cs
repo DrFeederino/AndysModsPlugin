@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace AndysModsPlugin.mods.LethalLandmines
@@ -8,37 +7,20 @@ namespace AndysModsPlugin.mods.LethalLandmines
     [HarmonyWrapSafe]
     internal static class LethalLandminesPatch
     {
-        // Handy hash-set to detect an enemy we know. Needed for landmine. Postfix "(Clone)" is caused by game duplication.
-        internal static HashSet<string> knownEnemies =
-        [
-            "MaskedPlayerEnemy(Clone)",
-            "NutcrackerEnemy(Clone)",
-            "BaboonHawkEnemy(Clone)",
-            "Flowerman(Clone)",
-            "SandSpider(Clone)",
-            "Centipede(Clone)",
-            "SpringMan(Clone)",
-            // Removed as per suggestion
-            // https://github.com/DrFeederino/AndysModsPlugin/issues/1
-            //"DressGirl(Clone)",
-            "HoarderBug(Clone)",
-            "Blob(Clone)",
-            "JesterEnemy(Clone)",
-            "PufferEnemy(Clone)",
-            "Crawler(Clone)"
-        ];
-
 
         /**
          * Helper method to detect if gameObject's name is one of Enemy.
          */
-        public static bool IsEnemy(GameObject enemy)
+        public static bool IsEnemy(Collider enemy)
         {
-            if (enemy == null)
+            if (enemy == null || 
+                enemy.transform == null || 
+                enemy.transform.parent == null || 
+                enemy.transform.parent.gameObject == null)
             {
                 return false;
             }
-            return knownEnemies.Contains(enemy.name);
+            return enemy.CompareTag("Enemy") && enemy.transform.parent.gameObject.GetComponent<EnemyAI>().enemyType.canDie;
         }
 
         [HarmonyPatch("OnTriggerEnter")]
@@ -58,7 +40,7 @@ namespace AndysModsPlugin.mods.LethalLandmines
 
         private static void TriggerMineIfEnemy(Landmine __instance, Collider other, ref bool ___sendingExplosionRPC, ref float ___pressMineDebounceTimer, bool isExit)
         {
-            if (IsEnemy(other?.transform?.parent?.gameObject))
+            if (IsEnemy(other))
             {
                 if (isExit)
                 {

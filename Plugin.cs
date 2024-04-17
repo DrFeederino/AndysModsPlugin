@@ -8,9 +8,10 @@ using UnityEngine;
 namespace AndysModsPlugin
 {
 
-    [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
+    [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     [BepInProcess("Lethal Company.exe")]
     [BepInDependency("com.rune580.LethalCompanyInputUtils", BepInDependency.DependencyFlags.HardDependency)]
+    [BepInDependency("LC_API_V50", BepInDependency.DependencyFlags.HardDependency)]
     public sealed class AndysModsPlugin : BaseUnityPlugin
     {
         internal static ManualLogSource Log;
@@ -21,8 +22,8 @@ namespace AndysModsPlugin
         {
             Instance = this;
             Log = Logger;
-            PluginPath = Info.Location.TrimEnd($"{PluginInfo.PLUGIN_GUID}.dll".ToCharArray());
-            GameObject val = new($"{PluginInfo.PLUGIN_NAME}-{PluginInfo.PLUGIN_VERSION}");
+            PluginPath = Info.Location.TrimEnd($"{MyPluginInfo.PLUGIN_GUID}.dll".ToCharArray());
+            GameObject val = new($"{MyPluginInfo.PLUGIN_NAME}-{MyPluginInfo.PLUGIN_VERSION}");
             val.AddComponent<AndysMods>().Init();
             DontDestroyOnLoad(val);
             Log.LogInfo($"Full plugin path: {Info.Location}");
