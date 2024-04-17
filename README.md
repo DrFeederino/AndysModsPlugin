@@ -43,7 +43,7 @@ If you are using this mod with GameMasters, be aware chat commands won't work. T
 __By default, all mods are enabled__.
 # Release v1.8.4:
 - Fixes:
-    - Lethal Turrets is now aims at enemies properly respecting walls and doesn't trigger on nearby enemies through walls;
+    - Lethal Turrets now aims at enemies properly respecting walls and doesn't trigger on nearby enemies through walls;
     - Landmines has seen some behind-the-scenes re-work to better detect enemies now and in the future;
     - This version uses custom re-built version of LC_API for now that works with V50. 
 # Release v1.8.3:
