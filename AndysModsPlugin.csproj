@@ -4,25 +4,33 @@
     <TargetFramework>net48</TargetFramework>
     <AssemblyName>AndysModsPlugin</AssemblyName>
     <Description>Collection of mods packaged with care and love by Andy aka "DrFeederino".</Description>
-    <Version>1.8.6</Version>
+    <Version>1.8.7</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
+    <RootNamespace>AndysModsPlugin</RootNamespace>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <DebugType>Portable</DebugType>
+  <PropertyGroup>
+    <OutputPath>bin</OutputPath>
+    <!-- Don't forget to change path -->
+    <LETHAL_COMPANY_DIR>D:\SteamLibrary\steamapps\common\Lethal Company</LETHAL_COMPANY_DIR>
+    <R2MODMAN_DEFAULT_PROFILE>C:\Users\kamaz\AppData\Roaming\r2modmanPlus-local\LethalCompany\profiles\Default\BepInEx\plugins</R2MODMAN_DEFAULT_PROFILE>
+    <INSTALLED_MOD_DIR>$(R2MODMAN_DEFAULT_PROFILE)\DrFeederino-AndysMods</INSTALLED_MOD_DIR>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <Optimize>True</Optimize>
-  </PropertyGroup>
+  <!-- prevent referenced assemblies from being copied to the output folder -->
+  <Target Name="ClearReferenceCopyLocalPaths" AfterTargets="ResolveAssemblyReferences">
+    <ItemGroup>
+      <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)" />
+    </ItemGroup>
+  </Target>
 
   <ItemGroup>
     <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
     <PackageReference Include="BepInEx.Core" Version="5.*" PrivateAssets="all" />
-    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.1.0" PrivateAssets="all" />
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" PrivateAssets="all" />
     <PackageReference Include="UnityEngine.Modules" Version="2022.3.9" IncludeAssets="compile" PrivateAssets="all" />
     <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.2" PrivateAssets="all" />
   </ItemGroup>
@@ -30,36 +38,41 @@
   <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
   </ItemGroup>
+
   
   <ItemGroup>
     <Reference Include="Assembly-CSharp" Publicize="true">
       <!-- Don't forget to change path -->
-      <HintPath>D:\SteamLibrary\steamapps\common\Lethal Company\Lethal Company_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>$(LETHAL_COMPANY_DIR)\Lethal Company_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass" Publicize="true">
-      <HintPath>D:\SteamLibrary\steamapps\common\Lethal Company\Lethal Company_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>$(LETHAL_COMPANY_DIR)\Lethal Company_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="LC_API_V50">
-      <HintPath>..\..\..\AppData\Roaming\r2modmanPlus-local\LethalCompany\profiles\Default\BepInEx\plugins\DrFeederino-LC_API_V50\LC_API_V50.dll</HintPath>
+      <HintPath>$(R2MODMAN_DEFAULT_PROFILE)\DrFeederino-LC_API_V50\LC_API_V50.dll</HintPath>
     </Reference>
     <Reference Include="LethalCompanyInputUtils">
-      <HintPath>..\..\..\AppData\Roaming\r2modmanPlus-local\LethalCompany\profiles\Default\BepInEx\plugins\Rune580-LethalCompany_InputUtils\LethalCompanyInputUtils\LethalCompanyInputUtils.dll</HintPath>
+      <HintPath>$(R2MODMAN_DEFAULT_PROFILE)\Rune580-LethalCompany_InputUtils\LethalCompanyInputUtils\LethalCompanyInputUtils.dll</HintPath>
     </Reference>
-    <Reference Include="netstandard" />
     <Reference Include="Unity.InputSystem">
-      <HintPath>D:\SteamLibrary\steamapps\common\Lethal Company\Lethal Company_Data\Managed\Unity.InputSystem.dll</HintPath>
+      <HintPath>$(LETHAL_COMPANY_DIR)\Lethal Company_Data\Managed\Unity.InputSystem.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Netcode.Runtime">
-      <!-- Don't forget to change path -->
-      <HintPath>D:\SteamLibrary\steamapps\common\Lethal Company\Lethal Company_Data\Managed\Unity.Netcode.Runtime.dll</HintPath>
+      <HintPath>$(LETHAL_COMPANY_DIR)\Lethal Company_Data\Managed\Unity.Netcode.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>D:\SteamLibrary\steamapps\common\Lethal Company\Lethal Company_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+      <HintPath>$(LETHAL_COMPANY_DIR)\Lethal Company_Data\Managed\Unity.TextMeshPro.dll</HintPath>
     </Reference>
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="cd C:\Users\kamaz\Documents\GitHub\NetcodePatcher-2.4.0\plugins\&#xD;&#xA;del * /q&#xD;&#xA;copy $(TargetPath) .&#xD;&#xA;copy $(TargetDir)$(ProjectName).pdb .&#xD;&#xA;cd ..&#xD;&#xA;NetcodePatcher.dll plugins/ deps/&#xD;&#xA;cd plugins/&#xD;&#xA;del $(ProjectName)_original.dll /q&#xD;&#xA;del $(ProjectName)_original.pdb /q&#xD;&#xA;copy /Y * C:\Users\kamaz\AppData\Roaming\r2modmanPlus-local\LethalCompany\profiles\Default\BepInEx\plugins\DrFeederino-AndysMods&#xD;&#xA;del * /q&#xD;&#xA;" />
+  <Target Name="NetcodePatch" AfterTargets="PostBuildEvent">
+    <Exec Command="netcode-patch -nv 1.5.2 &quot;$(TargetPath)&quot; @(ReferencePathWithRefAssemblies->'&quot;%(Identity)&quot;', ' ')"/>
+  </Target>
+
+  <!--Automatically copy dll and pdb to default dir-->
+  <Target Name="Copy to profile" AfterTargets="PostBuildEvent">
+    <Exec Command="copy /Y $(TargetDir)$(AssemblyName).dll $(INSTALLED_MOD_DIR)\$(AssemblyName).dll"/>
+    <Exec Command="copy /Y $(TargetDir)$(AssemblyName).pdb $(INSTALLED_MOD_DIR)\$(AssemblyName).pdb"/>
   </Target>
 
 </Project>
