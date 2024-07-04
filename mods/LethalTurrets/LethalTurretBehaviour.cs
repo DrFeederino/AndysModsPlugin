@@ -196,7 +196,7 @@ namespace AndysModsPlugin.mods.LethalTurrets
             if (turret == null)
             {
                 AndysModsPlugin.Log.LogInfo("Lethal turrets: tried to call on NULL turret.");
-                if (NetworkObject.IsSpawned)
+                if (NetworkObject.IsSpawned && (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer))
                 {
                     AndysModsPlugin.Log.LogInfo("Lethal turrets: despawned network object for client.");
                     NetworkObject.Despawn(true);
@@ -510,7 +510,7 @@ namespace AndysModsPlugin.mods.LethalTurrets
         public void SpawnTurretClientRpc(ulong turretId)
         {
             turret = NetworkManager.Singleton.SpawnManager.SpawnedObjects[turretId].gameObject.GetComponentInChildren<Turret>();
-            AndysModsPlugin.Log.LogInfo($"Lethal Turrets: spawning lethal turret for client {GameNetworkManager.Instance.localPlayerController?.playerUsername}, turret ID: {turret?.NetworkObjectId}.");
+            AndysModsPlugin.Log.LogInfo($"Lethal Turrets: spawning lethal turret for client {GameNetworkManager.Instance.localPlayerController?.playerUsername ?? "unknown player"}, turret ID: {turret?.NetworkObjectId}.");
             HookupTurret(turret);
         }
 
@@ -537,8 +537,15 @@ namespace AndysModsPlugin.mods.LethalTurrets
             if (enemy != null && targetEnemy != null && targetEnemy.name == enemy.name && !targetEnemy.isEnemyDead)
             {
                 int dealtDamage = hit.distance >= 3f ? 2 : 3;
-                AndysModsPlugin.Log.LogInfo($"Lethal Turrets: hitting {targetEnemy.name} for {dealtDamage} by turret ID: {turret?.NetworkObjectId}.");
-                targetEnemy.HitEnemy(dealtDamage, null, false);
+                AndysModsPlugin.Log.LogInfo($"Lethal Turrets: hitting {targetEnemy?.name} for {dealtDamage} by turret ID: {turret?.NetworkObjectId}.");
+                // bunker spider doesn't have a null check on player and causes NPE
+                if (targetEnemy is SandSpiderAI)
+                {
+                    targetEnemy.HitEnemy(dealtDamage, LC_API.GameInterfaceAPI.Features.Player.HostPlayer?.PlayerController ?? null, true);
+                } else
+                {
+                    targetEnemy.HitEnemy(dealtDamage, null  , true);
+                }
             }
         }
 
