@@ -28,7 +28,7 @@ namespace AndysModsPlugin
             DontDestroyOnLoad(val);
             Log.LogInfo($"Full plugin path: {Info.Location}");
             Log.LogInfo($"Path to plugin is: {PluginPath}");
-            NetcodeWeaver();
+            NetcodePatcher();
         }
 
         public void BindConfig<T>(ref ConfigEntry<T> config, string section, string key, T defaultValue, string description = "")
@@ -36,7 +36,7 @@ namespace AndysModsPlugin
             config = Config.Bind(section, key, defaultValue, description);
         }
 
-        private static void NetcodeWeaver()
+        private static void NetcodePatcher()
         {
             var types = Assembly.GetExecutingAssembly().GetTypes();
             foreach (var type in types)

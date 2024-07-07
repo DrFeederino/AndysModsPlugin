@@ -43,6 +43,10 @@ If you are using this mod with GameMasters, be aware chat commands won't work. T
 __By default, all mods are enabled__.
 # For users of original LC_API:
 __Please disable or remove the mod as it can lead to issues with provided release of this mod.__
+# Release v1.8.7:
+- Updates:
+  - LC_API has been updated to v3.4.9 and this version has been recompiled with the latest in-game libraries._
+  - This mod has been tested with the latest V56 update.
 # Release v1.8.6:
 - Fixes:
     - Bumped up version of LC_API_V50 and fixed issue that would result in player not able to move.
