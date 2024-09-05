@@ -101,7 +101,7 @@ namespace AndysModsPlugin.utils
 
         private void ReplaceTurret(ulong turretId)
         {
-            AndysModsPlugin.Log.LogInfo($"Lethal Turrets: replacing turret with a more lethal version {GameNetworkManager.Instance.localPlayerController?.playerUsername}.");
+            AndysModsPlugin.Log.LogInfo($"Lethal Turrets: replacing turret with a more lethal version for {GameNetworkManager.Instance.localPlayerController?.playerUsername}.");
             NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(turretId, out NetworkObject turretObject);
             Turret turret = turretObject.gameObject.GetComponentInChildren<Turret>();
             if (turret == null)

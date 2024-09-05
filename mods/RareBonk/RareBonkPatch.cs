@@ -22,7 +22,7 @@ namespace AndysModsPlugin.mods.RareBonk
             int bonkChance = Random.Range(1, 100);
             if (__instance != null && bonkChance <= 10)
             {
-                AndysModsPlugin.Log.LogInfo($"Rare Bonk: BONK by {__instance.playerHeldBy.playerUsername}!");
+                AndysModsPlugin.Log.LogInfo($"Rare Bonk: BONK by {__instance.playerHeldBy?.playerUsername}!");
                 __instance.shovelHitForce = BonkShovelForce;
                 ModNetworkHandler.Instance?.PlayBonkServerRpc(__instance.NetworkObjectId);
             }

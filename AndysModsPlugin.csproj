@@ -4,7 +4,7 @@
     <TargetFramework>net48</TargetFramework>
     <AssemblyName>AndysModsPlugin</AssemblyName>
     <Description>Collection of mods packaged with care and love by Andy aka "DrFeederino".</Description>
-    <Version>1.8.7</Version>
+    <Version>1.8.9</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
     <RootNamespace>AndysModsPlugin</RootNamespace>
