@@ -43,6 +43,10 @@ If you are using this mod with GameMasters, be aware chat commands won't work. T
 __By default, all mods are enabled__.
 # For users of original LC_API:
 __Please disable or remove the mod as it can lead to issues with provided release of this mod.__
+# Release v1.8.10:
+- Updates:
+  - Bumped up version of LC_API_V50 to 3.4.12.
+  - Bumped up version of InputUtils to 0.7.7.
 # Release v1.8.9:
 - Updates:
   - Bumped up version of LC_API_V50 to 3.4.11.

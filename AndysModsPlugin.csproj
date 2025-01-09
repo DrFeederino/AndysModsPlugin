@@ -4,7 +4,7 @@
     <TargetFramework>net48</TargetFramework>
     <AssemblyName>AndysModsPlugin</AssemblyName>
     <Description>Collection of mods packaged with care and love by Andy aka "DrFeederino".</Description>
-    <Version>1.8.9</Version>
+    <Version>1.8.10</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
     <RootNamespace>AndysModsPlugin</RootNamespace>
@@ -38,7 +38,6 @@
   <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
   </ItemGroup>
-
   
   <ItemGroup>
     <Reference Include="Assembly-CSharp" Publicize="true">
@@ -52,7 +51,7 @@
       <HintPath>$(R2MODMAN_DEFAULT_PROFILE)\DrFeederino-LC_API_V50\LC_API_V50.dll</HintPath>
     </Reference>
     <Reference Include="LethalCompanyInputUtils">
-      <HintPath>$(R2MODMAN_DEFAULT_PROFILE)\Rune580-LethalCompany_InputUtils\LethalCompanyInputUtils\LethalCompanyInputUtils.dll</HintPath>
+      <HintPath>..\..\..\AppData\Roaming\r2modmanPlus-local\LethalCompany\profiles\Default\BepInEx\plugins\Rune580-LethalCompany_InputUtils\LethalCompanyInputUtils\LethalCompanyInputUtils.dll</HintPath>
     </Reference>
     <Reference Include="Unity.InputSystem">
       <HintPath>$(LETHAL_COMPANY_DIR)\Lethal Company_Data\Managed\Unity.InputSystem.dll</HintPath>
@@ -64,15 +63,24 @@
       <HintPath>$(LETHAL_COMPANY_DIR)\Lethal Company_Data\Managed\Unity.TextMeshPro.dll</HintPath>
     </Reference>
   </ItemGroup>
-
-  <Target Name="NetcodePatch" AfterTargets="PostBuildEvent">
+  
+  <ItemGroup>
+    <!-- will be automatically skipped for Visual Studio -->
+    <NetcodePatch Include="$(TargetPath)" />
+  </ItemGroup>
+  <PropertyGroup>
+    <!-- silence the warning message that should have led you to this documentation -->
+    <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);NCP0001</MSBuildWarningsAsMessages>
+  </PropertyGroup>
+  <Target Name="LegacyNetcodePatch" AfterTargets="NetcodePatch" Condition="'$(MSBuildRuntimeType)' != 'Core'">
+    <!-- run the CLI patcher only for MSBuilds that cannot load the dependencies -->
     <Exec Command="netcode-patch -nv 1.5.2 &quot;$(TargetPath)&quot; @(ReferencePathWithRefAssemblies->'&quot;%(Identity)&quot;', ' ')"/>
   </Target>
 
   <!--Automatically copy dll and pdb to default dir-->
   <Target Name="Copy to profile" AfterTargets="PostBuildEvent">
-    <Exec Command="copy /Y $(TargetDir)$(AssemblyName).dll $(INSTALLED_MOD_DIR)\$(AssemblyName).dll"/>
-    <Exec Command="copy /Y $(TargetDir)$(AssemblyName).pdb $(INSTALLED_MOD_DIR)\$(AssemblyName).pdb"/>
+    <Exec Command="copy /Y $(TargetDir)$(AssemblyName).dll $(INSTALLED_MOD_DIR)\$(AssemblyName).dll" />
+    <Exec Command="copy /Y $(TargetDir)$(AssemblyName).pdb $(INSTALLED_MOD_DIR)\$(AssemblyName).pdb" />
   </Target>
 
 </Project>
