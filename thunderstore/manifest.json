@@ -2,7 +2,7 @@
   "name": "AndysMods",
   "version_number": "1.8.10",
   "website_url": "https://github.com/DrFeederino/AndysModsPlugin",
-  "description": "V64 READY TO GO",
+  "description": "V69 READY TO GO",
   "dependencies": [
     "BepInEx-BepInExPack-5.4.2100",
     "Rune580-LethalCompany_InputUtils-0.7.7",
