@@ -1,11 +1,11 @@
 {
   "name": "AndysMods",
-  "version_number": "1.8.10",
+  "version_number": "1.9.0",
   "website_url": "https://github.com/DrFeederino/AndysModsPlugin",
-  "description": "V69 READY TO GO",
+  "description": "Compatible with V73",
   "dependencies": [
-    "BepInEx-BepInExPack-5.4.2100",
-    "Rune580-LethalCompany_InputUtils-0.7.7",
-    "DrFeederino-LC_API_V50-3.4.12"
+    "BepInEx-BepInExPack-5.4.2304",
+    "Rune580-LethalCompany_InputUtils-0.7.12",
+    "DrFeederino-LC_API_V50-3.4.14"
   ]
 }

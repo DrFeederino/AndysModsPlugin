@@ -4,7 +4,7 @@
     <TargetFramework>net48</TargetFramework>
     <AssemblyName>AndysModsPlugin</AssemblyName>
     <Description>Collection of mods packaged with care and love by Andy aka "DrFeederino".</Description>
-    <Version>1.8.10</Version>
+    <Version>1.9.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
     <RootNamespace>AndysModsPlugin</RootNamespace>
@@ -12,13 +12,20 @@
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="../README.md" Pack="true" PackagePath="/" />
+    <None Include="../LICENSE" Pack="true" PackagePath="/" />
+  </ItemGroup>
+
   <PropertyGroup>
     <OutputPath>bin</OutputPath>
     <!-- Don't forget to change path -->
     <LETHAL_COMPANY_DIR>D:\SteamLibrary\steamapps\common\Lethal Company</LETHAL_COMPANY_DIR>
+    <LETHAL_COMPANY_REFS>$(LETHAL_COMPANY_DIR)\Lethal Company_Data\Managed</LETHAL_COMPANY_REFS>
     <R2MODMAN_DEFAULT_PROFILE>C:\Users\kamaz\AppData\Roaming\r2modmanPlus-local\LethalCompany\profiles\Default\BepInEx\plugins</R2MODMAN_DEFAULT_PROFILE>
     <INSTALLED_MOD_DIR>$(R2MODMAN_DEFAULT_PROFILE)\DrFeederino-AndysMods</INSTALLED_MOD_DIR>
   </PropertyGroup>
+
 
   <!-- prevent referenced assemblies from being copied to the output folder -->
   <Target Name="ClearReferenceCopyLocalPaths" AfterTargets="ResolveAssemblyReferences">
@@ -32,16 +39,15 @@
     <PackageReference Include="BepInEx.Core" Version="5.*" PrivateAssets="all" />
     <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" PrivateAssets="all" />
     <PackageReference Include="UnityEngine.Modules" Version="2022.3.9" IncludeAssets="compile" PrivateAssets="all" />
-    <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.2" PrivateAssets="all" />
+    <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.3" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Reference Include="Assembly-CSharp" Publicize="true">
-      <!-- Don't forget to change path -->
       <HintPath>$(LETHAL_COMPANY_DIR)\Lethal Company_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass" Publicize="true">
@@ -63,24 +69,49 @@
       <HintPath>$(LETHAL_COMPANY_DIR)\Lethal Company_Data\Managed\Unity.TextMeshPro.dll</HintPath>
     </Reference>
   </ItemGroup>
-  
-  <ItemGroup>
-    <!-- will be automatically skipped for Visual Studio -->
-    <NetcodePatch Include="$(TargetPath)" />
-  </ItemGroup>
+
   <PropertyGroup>
     <!-- silence the warning message that should have led you to this documentation -->
     <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);NCP0001</MSBuildWarningsAsMessages>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <DepsFolder>$(TargetDir)deps</DepsFolder>
   </PropertyGroup>
-  <Target Name="LegacyNetcodePatch" AfterTargets="NetcodePatch" Condition="'$(MSBuildRuntimeType)' != 'Core'">
-    <!-- run the CLI patcher only for MSBuilds that cannot load the dependencies -->
-    <Exec Command="netcode-patch -nv 1.5.2 &quot;$(TargetPath)&quot; @(ReferencePathWithRefAssemblies->'&quot;%(Identity)&quot;', ' ')"/>
-  </Target>
 
+  <!-- Copy all dependencies to deps folder before netcode patching -->
+  <Target Name="CopyDependencies" AfterTargets="PostBuildEvent" BeforeTargets="NetcodePatch">
+    <!-- Create deps folder -->
+    <MakeDir Directories="$(DepsFolder)" />
+
+    <!-- Copy all referenced assemblies -->
+    <Copy SourceFiles="@(ReferencePath)" DestinationFolder="$(DepsFolder)" SkipUnchangedFiles="true" />
+
+    <!-- Copy all files from Lethal Company managed folder -->
+    <ItemGroup>
+      <LethalCompanyManagedFiles Include="$(LETHAL_COMPANY_REFS)\*.dll" />
+    </ItemGroup>
+    <Copy SourceFiles="@(LethalCompanyManagedFiles)" DestinationFolder="$(DepsFolder)" SkipUnchangedFiles="true" />
+  </Target>
+  
+  <!--Auto-patch netcode-->
+  <Target Name="NetcodePatch" AfterTargets="CopyDependencies">
+    <Exec Command="echo Applying Netcode Patch to $(TargetPath)" />
+    <Exec Command="netcode-patch -uv 2022.3.62 -nv 1.12.0 -tv 1.0.0 &quot;$(TargetPath)&quot; &quot;$(DepsFolder)&quot;" />
+  </Target>
+  
   <!--Automatically copy dll and pdb to default dir-->
-  <Target Name="Copy to profile" AfterTargets="PostBuildEvent">
+  <Target Name="Copy to profile" AfterTargets="NetcodePatch">
+    <Exec Command="echo Copying $(TargetDir)$(AssemblyName).dll to $(INSTALLED_MOD_DIR)" />
     <Exec Command="copy /Y $(TargetDir)$(AssemblyName).dll $(INSTALLED_MOD_DIR)\$(AssemblyName).dll" />
     <Exec Command="copy /Y $(TargetDir)$(AssemblyName).pdb $(INSTALLED_MOD_DIR)\$(AssemblyName).pdb" />
+
+    <!-- Copy files from repository root -->
+    <Exec Command="copy /Y $(SolutionDir)README.md $(INSTALLED_MOD_DIR)\README.md" />
+    <Exec Command="copy /Y $(SolutionDir)LICENSE $(INSTALLED_MOD_DIR)\LICENSE" />
+
+    <!-- Copy files from assets folder -->
+    <Exec Command="copy /Y $(SolutionDir)thunderstore\icon.png $(INSTALLED_MOD_DIR)\icon.png" />
+    <Exec Command="copy /Y $(SolutionDir)thunderstore\manifest.json $(INSTALLED_MOD_DIR)\manifest.json" />
+    <Exec Command="copy /Y $(SolutionDir)thunderstore\assets\andysmods $(INSTALLED_MOD_DIR)\andysmods" />
   </Target>
 
 </Project>
